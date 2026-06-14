@@ -1,0 +1,24 @@
+{
+  "languages": {
+    "Italian": "Native",
+    "English": "B1",
+    "Spanish": "B2"
+  },
+  "tools": [
+    "Browser usage",
+    "Microsoft Excel",
+    "Social Networks",
+    "Microsoft Office (Word, Excel, PowerPoint, etc.)",
+    "Windows",
+    "Google Chrome",
+    "Microsoft Word",
+    "Visual Studio",
+    "Visual Studio Code"
+  ],
+  "programming": {
+    "HTML": "Beginner",
+    "JavaScript": "Beginner",
+    "TypeScript": "Base",
+    "C++": "Intermediate"
+  }
+}

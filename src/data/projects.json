@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Portfolio Site",
+    "description": "A sleek, responsive personal portfolio built with React, showcasing projects, experience, and contact information.",
+    "techStack": ["React", "React Router", "Formspree", "CSS"],
+    "link": "https://andrea-iacolare.dev",
+    "image": "project1.png"
+  },
+  {
+    "title": "LifeOS Dashboard",
+    "description": "Lifestyle dashboard for diet, groceries and health tracking.",
+    "techStack": ["React", "Context API", "LocalStorage"],
+    "link": "https://andree23-i.github.io/LifeOs-react/",
+    "image": "project2.png"
+  }
+]
