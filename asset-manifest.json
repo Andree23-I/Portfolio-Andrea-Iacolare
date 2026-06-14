@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Portfolio-Andrea-Iacolare/static/css/main.c9a29278.css",
-    "main.js": "/Portfolio-Andrea-Iacolare/static/js/main.5304f113.js",
+    "main.js": "/Portfolio-Andrea-Iacolare/static/js/main.3b620aa2.js",
     "static/css/486.f6c171e3.chunk.css": "/Portfolio-Andrea-Iacolare/static/css/486.f6c171e3.chunk.css",
     "static/js/486.885e9cec.chunk.js": "/Portfolio-Andrea-Iacolare/static/js/486.885e9cec.chunk.js",
     "static/css/590.f6c171e3.chunk.css": "/Portfolio-Andrea-Iacolare/static/css/590.f6c171e3.chunk.css",
@@ -16,7 +16,7 @@
     "service-worker.js": "/Portfolio-Andrea-Iacolare/service-worker.js",
     "index.html": "/Portfolio-Andrea-Iacolare/index.html",
     "main.c9a29278.css.map": "/Portfolio-Andrea-Iacolare/static/css/main.c9a29278.css.map",
-    "main.5304f113.js.map": "/Portfolio-Andrea-Iacolare/static/js/main.5304f113.js.map",
+    "main.3b620aa2.js.map": "/Portfolio-Andrea-Iacolare/static/js/main.3b620aa2.js.map",
     "486.f6c171e3.chunk.css.map": "/Portfolio-Andrea-Iacolare/static/css/486.f6c171e3.chunk.css.map",
     "486.885e9cec.chunk.js.map": "/Portfolio-Andrea-Iacolare/static/js/486.885e9cec.chunk.js.map",
     "590.f6c171e3.chunk.css.map": "/Portfolio-Andrea-Iacolare/static/css/590.f6c171e3.chunk.css.map",
@@ -31,6 +31,6 @@
   },
   "entrypoints": [
     "static/css/main.c9a29278.css",
-    "static/js/main.5304f113.js"
+    "static/js/main.3b620aa2.js"
   ]
 }
