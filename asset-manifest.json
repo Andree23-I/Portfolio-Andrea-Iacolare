@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "/Portfolio-Andrea-Iacolare/static/css/main.c9a29278.css",
-    "main.js": "/Portfolio-Andrea-Iacolare/static/js/main.6136d8c2.js",
+    "main.js": "/Portfolio-Andrea-Iacolare/static/js/main.1934bfb4.js",
     "static/css/451.80b17b10.chunk.css": "/Portfolio-Andrea-Iacolare/static/css/451.80b17b10.chunk.css",
-    "static/js/451.d7aed71e.chunk.js": "/Portfolio-Andrea-Iacolare/static/js/451.d7aed71e.chunk.js",
+    "static/js/451.0e8946fb.chunk.js": "/Portfolio-Andrea-Iacolare/static/js/451.0e8946fb.chunk.js",
     "static/css/590.80b17b10.chunk.css": "/Portfolio-Andrea-Iacolare/static/css/590.80b17b10.chunk.css",
     "static/js/590.4803def0.chunk.js": "/Portfolio-Andrea-Iacolare/static/js/590.4803def0.chunk.js",
     "static/css/473.80b17b10.chunk.css": "/Portfolio-Andrea-Iacolare/static/css/473.80b17b10.chunk.css",
@@ -14,9 +14,9 @@
     "service-worker.js": "/Portfolio-Andrea-Iacolare/service-worker.js",
     "index.html": "/Portfolio-Andrea-Iacolare/index.html",
     "main.c9a29278.css.map": "/Portfolio-Andrea-Iacolare/static/css/main.c9a29278.css.map",
-    "main.6136d8c2.js.map": "/Portfolio-Andrea-Iacolare/static/js/main.6136d8c2.js.map",
+    "main.1934bfb4.js.map": "/Portfolio-Andrea-Iacolare/static/js/main.1934bfb4.js.map",
     "451.80b17b10.chunk.css.map": "/Portfolio-Andrea-Iacolare/static/css/451.80b17b10.chunk.css.map",
-    "451.d7aed71e.chunk.js.map": "/Portfolio-Andrea-Iacolare/static/js/451.d7aed71e.chunk.js.map",
+    "451.0e8946fb.chunk.js.map": "/Portfolio-Andrea-Iacolare/static/js/451.0e8946fb.chunk.js.map",
     "590.80b17b10.chunk.css.map": "/Portfolio-Andrea-Iacolare/static/css/590.80b17b10.chunk.css.map",
     "590.4803def0.chunk.js.map": "/Portfolio-Andrea-Iacolare/static/js/590.4803def0.chunk.js.map",
     "473.80b17b10.chunk.css.map": "/Portfolio-Andrea-Iacolare/static/css/473.80b17b10.chunk.css.map",
@@ -27,6 +27,6 @@
   },
   "entrypoints": [
     "static/css/main.c9a29278.css",
-    "static/js/main.6136d8c2.js"
+    "static/js/main.1934bfb4.js"
   ]
 }
