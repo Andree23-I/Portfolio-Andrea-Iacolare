@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { SettingsProvider } from './contexts/SettingsContext';
 import Header from './components/Header';
 
@@ -7,6 +7,7 @@ const Intro = lazy(() => import('./sections/Intro'));
 const Skills = lazy(() => import('./sections/Skills'));
 const Projects = lazy(() => import('./sections/Projects'));
 const Contact = lazy(() => import('./sections/Contact'));
+const Admin = lazy(() => import('./sections/Admin'));
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/skills" element={<Skills />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/admin" element={<Admin />} />
               </Routes>
             </Suspense>
           </main>

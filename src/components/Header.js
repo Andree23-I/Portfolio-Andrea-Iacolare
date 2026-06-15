@@ -15,12 +15,12 @@ const navItems = [
 function Header() {
   const { theme, toggleTheme, language, toggleLanguage } = useContext(SettingsContext);
   const t = translations[language];
-  
+
   return (
     <header className="top-navbar glass-panel">
       <div className="navbar-content">
-        <h1 className="brand">AI.</h1>
-        
+        <img src="logo.svg" className="brand"></img>
+
         <nav className="nav-links">
           {navItems.map(item => (
             <NavLink key={item.path} to={item.path} className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SettingsContext } from '../contexts/SettingsContext';
 import { translations } from '../translations';
 import './Section.css';
@@ -9,9 +10,11 @@ import Typewriter from '../components/Typewriter';
 function Intro() {
   const { language } = useContext(SettingsContext);
   const t = translations[language];
+  const navigate = useNavigate();
+
   return (
     <>
-      <section className="section intro glass-panel">
+      <section className="section intro glass-panel" style={{ position: 'relative' }}>
         <div className="floating-element shape-1"></div>
         <div className="floating-element shape-2"></div>
         <div className="floating-element shape-3"></div>
@@ -29,6 +32,23 @@ function Intro() {
             <FiLinkedin style={{ verticalAlign: 'middle', marginRight: '0.4rem' }} />{t.LinkedIn}
           </a>
         </div>
+
+        {/* Secret Admin Button */}
+        <div 
+          onClick={() => navigate('/admin')}
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            right: '20px',
+            width: '15px',
+            height: '15px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: '50%',
+            cursor: 'default',
+            zIndex: 100
+          }}
+          title=""
+        />
       </section>
       
       <Experience />
