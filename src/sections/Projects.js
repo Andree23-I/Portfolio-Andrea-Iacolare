@@ -13,11 +13,17 @@ function Projects() {
       <div className="project-grid">
         {projects.map((p, idx) => (
           <div key={idx} className="project-card">
-            {p.image && <img src={process.env.PUBLIC_URL + '/' + p.image} alt={p.title} className="project-img" loading="lazy" />}
-            <h3>{p.title}</h3>
-            <p>{p.description}</p>
-            <p><strong>{t.TechStack || 'Tech Stack'}:</strong> {p.techStack.join(', ')}</p>
-            <a href={p.link} target="_blank" rel="noopener noreferrer" className="btn-primary">{language === 'en' ? 'Live Demo' : 'Demo'}</a>
+            {p.image && <img src={process.env.PUBLIC_URL + '/' + p.image} alt={p.title} loading="lazy" />}
+            <div className="project-card-content">
+              <h3>{p.title}</h3>
+              <p>{p.description}</p>
+              <div className="project-tech-stack">
+                {p.techStack.map((tech, techIdx) => (
+                  <span key={techIdx} className="tech-badge">{tech}</span>
+                ))}
+              </div>
+              <a href={p.link} target="_blank" rel="noopener noreferrer" className="btn-primary">{language === 'en' ? 'Live Demo' : 'Demo'}</a>
+            </div>
           </div>
         ))}
       </div>
