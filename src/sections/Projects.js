@@ -12,8 +12,13 @@ function Projects() {
       <h2>{t.ProjectsTitle}</h2>
       <div className="project-grid">
         {projects.map((p, idx) => (
-          <div key={idx} className="project-card">
-            {p.image && <img src={process.env.PUBLIC_URL + '/' + p.image} alt={p.title} loading="lazy" />}
+          <div 
+            key={idx} 
+            className="project-card"
+            style={{
+              '--bg-image': p.image ? `url(${process.env.PUBLIC_URL + '/' + p.image})` : 'none'
+            }}
+          >
             <div className="project-card-content">
               <h3>{p.title}</h3>
               <p>{p.description}</p>
