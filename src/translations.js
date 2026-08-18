@@ -7,7 +7,7 @@ export const translations = {
     Member: "Member",
     Logout: "Logout",
     // New portfolio keys
-    Intro: "About Me",
+    Intro: "Andrea Iacolare",
     Experience: "Experience",
     Education: "Education",
     Skills: "Skills",
@@ -26,7 +26,7 @@ export const translations = {
     Send: "Send",
     ThankYou: "Thank you! Your message has been sent.",
     // Placeholder texts
-    IntroText: "Hi! I’m Andrea Iacolare, a passionate full‑stack developer based in Salerno, Italy. I love building sleek, futuristic web experiences and exploring new technologies.",
+    IntroText: "I am an AI developer.",
     ExperienceTitle: "Professional Experience",
     EducationTitle: "Education",
     SkillsTitle: "Technical Skills",
@@ -48,7 +48,7 @@ export const translations = {
     Member: "Membro",
     Logout: "Esci",
     // New portfolio keys
-    Intro: "Chi sono",
+    Intro: "Andrea Iacolare",
     Experience: "Esperienza",
     Education: "Formazione",
     Skills: "Competenze",
@@ -66,7 +66,7 @@ export const translations = {
     Send: "Invia",
     ThankYou: "Grazie! Il tuo messaggio è stato inviato.",
     // Placeholder texts
-    IntroText: "Ciao! Sono Andrea Iacolare, uno sviluppatore full‑stack appassionato, basato a Salerno, Italia. Amo creare esperienze web futuristiche e sperimentare nuove tecnologie.",
+    IntroText: "Sono un developer con l'AI.",
     ExperienceTitle: "Esperienza Professionale",
     EducationTitle: "Formazione",
     SkillsTitle: "Competenze Tecniche",

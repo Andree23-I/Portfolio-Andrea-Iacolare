@@ -17,12 +17,12 @@ function Skills() {
   ];
 
   return (
-    <section className="section skills glass-panel">
+    <section className="section skills">
       <h2>{t.SkillsTitle}</h2>
       
       <div className="skills-grid">
         {categories.map((cat, idx) => (
-          <div key={idx} className="skill-category-card glass-panel">
+          <div key={idx} className="skill-category-card">
             <h3 className="skill-cat-title">
               <span className="skill-icon">{cat.icon}</span> {cat.title}
             </h3>

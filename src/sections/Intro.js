@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { SettingsContext } from '../contexts/SettingsContext';
 import { translations } from '../translations';
 import './Section.css';
-import { FiMail, FiLinkedin, FiInstagram } from 'react-icons/fi';
+import { FiMail, FiLinkedin, FiInstagram, FiArrowDown } from 'react-icons/fi';
 import Experience from './Experience';
 import Typewriter from '../components/Typewriter';
 
@@ -14,23 +14,29 @@ function Intro() {
 
   return (
     <>
-      <section className="section intro glass-panel" style={{ position: 'relative' }}>
-        <div className="floating-element shape-1"></div>
-        <div className="floating-element shape-2"></div>
-        <div className="floating-element shape-3"></div>
-        
-        <h1><Typewriter text={t.Intro} delay={150} /></h1>
-        <p className="fade-in-text">{t.IntroText}</p>
-        <div className="social-links">
-          <a href="mailto:iacolareandrea@outlook.it" target="_blank" rel="noopener noreferrer">
-            <FiMail style={{ verticalAlign: 'middle', marginRight: '0.4rem' }} />{t.Email}
-          </a>
-          <a href="https://www.instagram.com/andree_23__/" target="_blank" rel="noopener noreferrer">
-            <FiInstagram style={{ verticalAlign: 'middle', marginRight: '0.4rem' }} />{t.Instagram}
-          </a>
-          <a href="https://www.linkedin.com/in/andrea-iacolare-a626a233a/" target="_blank" rel="noopener noreferrer">
-            <FiLinkedin style={{ verticalAlign: 'middle', marginRight: '0.4rem' }} />{t.LinkedIn}
-          </a>
+      <section className="section intro">
+        <div className="intro-text-content">
+          <h1>
+            <span style={{ display: 'block', fontSize: '0.5em', marginBottom: '0.5rem', fontWeight: 400, color: 'var(--text-muted)' }}>Hello, I am</span>
+            <span className="text-accent"><Typewriter text={t.Intro} delay={150} /></span>
+          </h1>
+          <p className="fade-in-text">{t.IntroText}</p>
+          
+          <div className="social-links">
+            <a href="mailto:iacolareandrea@outlook.it" target="_blank" rel="noopener noreferrer" title={t.Email}>
+              <FiMail />
+            </a>
+            <a href="https://www.instagram.com/andreaiacolare_/" target="_blank" rel="noopener noreferrer" title={t.Instagram}>
+              <FiInstagram />
+            </a>
+            <a href="https://www.linkedin.com/in/andrea-iacolare-a626a233a/" target="_blank" rel="noopener noreferrer" title={t.LinkedIn}>
+              <FiLinkedin />
+            </a>
+          </div>
+          
+          <div style={{ marginTop: '3rem', opacity: 0.5, animation: 'bounce 2s infinite' }}>
+             <FiArrowDown size={32} />
+          </div>
         </div>
 
         {/* Secret Admin Button */}
@@ -38,11 +44,11 @@ function Intro() {
           onClick={() => navigate('/admin')}
           style={{
             position: 'absolute',
-            bottom: '20px',
+            top: '20px',
             right: '20px',
             width: '15px',
             height: '15px',
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'transparent',
             borderRadius: '50%',
             cursor: 'default',
             zIndex: 100

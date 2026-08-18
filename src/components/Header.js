@@ -17,10 +17,8 @@ function Header() {
   const t = translations[language];
 
   return (
-    <header className="top-navbar glass-panel">
-      <div className="navbar-content">
-        <img src="logo.svg" className="brand"></img>
-
+    <header className="mac-dock">
+      <div className="dock-content">
         <nav className="nav-links">
           {navItems.map(item => (
             <NavLink key={item.path} to={item.path} className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
@@ -29,9 +27,11 @@ function Header() {
           ))}
         </nav>
 
+        <div className="dock-divider"></div>
+
         <div className="toggles">
           <button onClick={toggleLanguage} className="btn-toggle" title="Change Language">
-            <FiGlobe /> {language.toUpperCase()}
+            <FiGlobe />
           </button>
           <button onClick={toggleTheme} className="btn-toggle" title="Toggle Theme">
             {theme === 'dark' ? <FiSun /> : <FiMoon />}

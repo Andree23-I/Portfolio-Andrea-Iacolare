@@ -11,7 +11,7 @@ function Experience() {
   const t = translations[language];
 
   return (
-    <section className="section experience glass-panel">
+    <section className="section experience">
       <h2>{t.EducationTitle} & {t.ExperienceTitle}</h2>
       
       <div className="timeline-container">
@@ -23,7 +23,7 @@ function Experience() {
           </h3>
           <div className="modern-timeline">
             {educationData.map((item, idx) => (
-              <div key={`edu-${idx}`} className="timeline-card glass-panel">
+              <div key={`edu-${idx}`} className="timeline-card">
                 <div className="timeline-dot"></div>
                 <h4 className="timeline-role">{item.degree}</h4>
                 <div className="timeline-meta">
@@ -45,7 +45,7 @@ function Experience() {
           </h3>
           <div className="modern-timeline">
             {experienceData.map((item, idx) => (
-              <div key={`exp-${idx}`} className="timeline-card glass-panel">
+              <div key={`exp-${idx}`} className="timeline-card">
                 <div className="timeline-dot"></div>
                 <h4 className="timeline-role">{item.role}</h4>
                 <div className="timeline-meta">

@@ -1,0 +1,51 @@
+.svg-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 60px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.svg-button-outline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  fill: transparent;
+}
+
+.svg-button-rect {
+  fill: transparent;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-dasharray: 422, 0;
+  transition: all 0.5s linear;
+}
+
+.svg-button:hover .svg-button-rect {
+  stroke-dasharray: 50, 372;
+  stroke-dashoffset: 48;
+  stroke: var(--accent);
+}
+
+.svg-button-text {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: var(--transition);
+}
+
+.svg-button:hover .svg-button-text {
+  color: var(--accent);
+}
