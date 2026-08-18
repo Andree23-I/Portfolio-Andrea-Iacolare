@@ -19,8 +19,7 @@ import {
   FiAward,
   FiUser,
   FiLayout,
-  FiDatabase,
-  FiGlobe
+  FiDatabase
 } from 'react-icons/fi';
 import Experience from './Experience';
 import Typewriter from '../components/Typewriter';

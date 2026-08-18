@@ -5,12 +5,8 @@ import {
   FiX, 
   FiMoon, 
   FiSun, 
-  FiGlobe, 
   FiSliders, 
   FiCheck,
-  FiArrowDown,
-  FiArrowLeft,
-  FiArrowRight,
   FiInfo
 } from 'react-icons/fi';
 import './SettingsModal.css';
