@@ -20,36 +20,48 @@ function Contact() {
 
   const contacts = [
     { 
+      id: "email",
       icon: <FiMail />, 
       label: t.Email, 
       hint: email, 
       href: `mailto:${email}`, 
       brandColor: "#06b6d4",
-      brandGlow: "rgba(6, 182, 212, 0.4)" 
+      brandGlow: "rgba(6, 182, 212, 0.45)",
+      brandBg: "rgba(6, 182, 212, 0.12)",
+      brandHoverBg: "#06b6d4"
     },
     { 
+      id: "linkedin",
       icon: <FiLinkedin />, 
       label: t.LinkedIn, 
       hint: "andrea-iacolare", 
       href: "https://www.linkedin.com/in/andrea-iacolare-a626a233a/", 
       brandColor: "#0a66c2",
-      brandGlow: "rgba(10, 102, 194, 0.4)" 
+      brandGlow: "rgba(10, 102, 194, 0.5)",
+      brandBg: "rgba(10, 102, 194, 0.12)",
+      brandHoverBg: "#0a66c2"
     },
     { 
+      id: "github",
       icon: <FiGithub />, 
       label: t.GitHub || 'GitHub', 
       hint: "@andree23-i", 
       href: "https://github.com/andree23-i", 
-      brandColor: "#818cf8",
-      brandGlow: "rgba(129, 140, 248, 0.4)" 
+      brandColor: "#f0f6fc",
+      brandGlow: "rgba(240, 246, 252, 0.35)",
+      brandBg: "rgba(255, 255, 255, 0.08)",
+      brandHoverBg: "#24292e"
     },
     { 
+      id: "instagram",
       icon: <FiInstagram />, 
       label: t.Instagram, 
       hint: "@andreaiacolare_", 
       href: "https://www.instagram.com/andreaiacolare_/", 
       brandColor: "#e1306c",
-      brandGlow: "rgba(225, 48, 108, 0.4)" 
+      brandGlow: "rgba(225, 48, 108, 0.5)",
+      brandBg: "rgba(225, 48, 108, 0.12)",
+      brandHoverBg: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)"
     },
   ];
 
@@ -70,14 +82,16 @@ function Contact() {
             href={c.href} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="contact-card" 
+            className={`contact-card contact-${c.id}`} 
             style={{ 
-              '--hover-brand-color': c.brandColor,
-              '--hover-brand-glow': c.brandGlow 
+              '--brand-color': c.brandColor,
+              '--brand-glow': c.brandGlow,
+              '--brand-bg': c.brandBg,
+              '--brand-hover-bg': c.brandHoverBg 
             }}
           >
             <div className="contact-card-left">
-              <div className="contact-icon-box" style={{ color: c.brandColor }}>
+              <div className="contact-icon-box">
                 {c.icon}
               </div>
               <div className="contact-label-box">

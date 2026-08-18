@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { SettingsProvider } from './contexts/SettingsContext';
 import Header from './components/Header';
+import SettingsModal from './components/SettingsModal';
 
 const Intro = lazy(() => import('./sections/Intro'));
 const Skills = lazy(() => import('./sections/Skills'));
@@ -15,6 +16,7 @@ function App() {
       <Router>
         <div className="app-container">
           <Header />
+          <SettingsModal />
           <main className="main-content">
             <Suspense fallback={<div className="loading-spinner">Caricamento...</div>}>
               <Routes>

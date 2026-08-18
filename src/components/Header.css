@@ -1,48 +1,171 @@
-/* Cyber-Luxe Floating Dock Navigation */
+/* Cyber-Luxe Floating Dock Navigation (Drag-and-Drop Magnetic Snap to Left, Bottom, Right) */
 .mac-dock {
   position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
   z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.45rem 0.75rem;
+  padding: 0.45rem 0.65rem;
   border-radius: var(--radius-pill);
+  user-select: none;
+  touch-action: none;
   
   /* Glassmorphism & Cyber Glow */
   background: var(--surface-color);
   border: 1px solid var(--border-strong);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), 
-              0 0 20px -5px var(--primary-glow),
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 
+              0 0 25px -5px var(--primary-glow),
               inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transition: var(--transition);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: grab;
+}
+
+.mac-dock:active {
+  cursor: grabbing;
+}
+
+/* While Dragging Active State */
+.mac-dock.is-dragging {
+  position: fixed !important;
+  top: var(--drag-y) !important;
+  left: var(--drag-x) !important;
+  bottom: auto !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) scale(1.06) !important;
+  transition: none !important;
+  cursor: grabbing !important;
+  z-index: 10000 !important;
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85), 0 0 40px var(--primary-glow) !important;
 }
 
 body.light-theme .mac-dock {
-  background: rgba(255, 255, 255, 0.85);
-  border-color: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.12);
   box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.12),
-              0 0 25px -5px rgba(79, 70, 229, 0.15),
+              0 0 25px -5px rgba(37, 99, 235, 0.2),
               inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-@media (max-width: 768px) {
-  .mac-dock {
-    bottom: 1.25rem;
-    width: auto;
-    max-width: 95%;
-    padding: 0.4rem 0.5rem;
-  }
+/* ==========================================================================
+   Dock Orientations (Bottom, Left Vertical, Right Vertical)
+   ========================================================================== */
+
+/* 1. Bottom Dock (Horizontal) */
+.dock-bottom {
+  bottom: 2rem;
+  left: 50%;
+  top: auto;
+  right: auto;
+  transform: translateX(-50%);
+  border-radius: var(--radius-pill);
 }
 
+.dock-bottom .dock-content {
+  flex-direction: row;
+}
+
+.dock-bottom .nav-links {
+  flex-direction: row;
+}
+
+.dock-bottom .toggles {
+  flex-direction: row;
+}
+
+.dock-bottom .dock-divider {
+  width: 1px;
+  height: 22px;
+  margin: 0 0.25rem;
+}
+
+/* 2. Left Vertical Dock */
+.dock-left {
+  top: 50%;
+  left: 1.5rem;
+  bottom: auto;
+  right: auto;
+  transform: translateY(-50%);
+  border-radius: 26px;
+  padding: 0.65rem 0.45rem;
+}
+
+.dock-left .dock-content {
+  flex-direction: column;
+}
+
+.dock-left .nav-links {
+  flex-direction: column;
+}
+
+.dock-left .toggles {
+  flex-direction: column;
+}
+
+.dock-left .dock-divider {
+  width: 24px;
+  height: 1px;
+  margin: 0.25rem 0;
+}
+
+/* 3. Right Vertical Dock */
+.dock-right {
+  top: 50%;
+  right: 1.5rem;
+  bottom: auto;
+  left: auto;
+  transform: translateY(-50%);
+  border-radius: 26px;
+  padding: 0.65rem 0.45rem;
+}
+
+.dock-right .dock-content {
+  flex-direction: column;
+}
+
+.dock-right .nav-links {
+  flex-direction: column;
+}
+
+.dock-right .toggles {
+  flex-direction: column;
+}
+
+.dock-right .dock-divider {
+  width: 24px;
+  height: 1px;
+  margin: 0.25rem 0;
+}
+
+/* ==========================================================================
+   Dock Inner Elements
+   ========================================================================== */
 .dock-content {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
+}
+
+/* Drag Handle */
+.dock-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-light);
+  font-size: 1.15rem;
+  padding: 0.35rem;
+  border-radius: 8px;
+  transition: var(--transition-fast);
+  cursor: grab;
+  background: var(--surface-glass);
+}
+
+.dock-handle:hover {
+  color: #ffffff;
+  background: var(--primary);
+  transform: scale(1.12);
+  box-shadow: 0 0 12px var(--primary-glow);
 }
 
 .nav-links {
@@ -66,10 +189,68 @@ body.light-theme .mac-dock {
 }
 
 .nav-icon {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   transition: transform 0.3s ease;
+}
+
+.dock-vertical .nav-text {
+  display: none;
+}
+
+.dock-vertical .nav-link {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 14px;
+}
+
+.dock-vertical .nav-icon {
+  font-size: 1.25rem;
+}
+
+/* Tooltips in Vertical Mode */
+.dock-tooltip {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--surface-hover);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px var(--primary-glow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1010;
+}
+
+.dock-left .dock-tooltip {
+  left: calc(100% + 12px);
+  transform: translateY(-50%) translateX(-6px);
+}
+
+.dock-right .dock-tooltip {
+  right: calc(100% + 12px);
+  transform: translateY(-50%) translateX(6px);
+}
+
+.dock-left .nav-link:hover .dock-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.dock-right .nav-link:hover .dock-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
 @media (max-width: 640px) {
@@ -90,28 +271,30 @@ body.light-theme .mac-dock {
   transform: translateY(-2px);
 }
 
+.dock-vertical .nav-link:hover {
+  transform: scale(1.08);
+}
+
 .nav-link:hover .nav-icon {
   transform: scale(1.15);
   color: var(--primary-light);
 }
 
 .nav-link.active {
-  color: #ffffff;
+  color: #ffffff !important;
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent-violet) 100%);
   box-shadow: 0 4px 15px -3px var(--primary-glow);
   font-weight: 600;
 }
 
 body.light-theme .nav-link.active {
-  color: #ffffff;
+  color: #ffffff !important;
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent-violet) 100%);
 }
 
 .dock-divider {
-  width: 1px;
-  height: 22px;
   background-color: var(--border-strong);
-  margin: 0 0.2rem;
+  transition: all 0.3s ease;
 }
 
 .toggles {
@@ -133,12 +316,24 @@ body.light-theme .nav-link.active {
   gap: 0.35rem;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  position: relative;
+}
+
+.dock-vertical .btn-toggle {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 14px;
 }
 
 .btn-toggle:hover {
   color: var(--text-main);
   background: var(--surface-glass);
   transform: translateY(-2px);
+}
+
+.dock-vertical .btn-toggle:hover {
+  transform: scale(1.08);
 }
 
 .lang-badge {
@@ -153,12 +348,140 @@ body.light-theme .nav-link.active {
   color: var(--primary-light);
 }
 
-.theme-icon {
+.theme-icon,
+.settings-btn-icon {
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-settings:hover .settings-btn-icon {
+  transform: rotate(60deg) scale(1.15);
+  color: var(--primary-light);
 }
 
 .btn-theme:hover .theme-icon {
   transform: rotate(25deg) scale(1.15);
-  color: var(--accent-cyan);
+  color: var(--accent-amber);
 }
 
+/* ==========================================================================
+   Magnetic Snap Zones Indicators (Visible on Drag)
+   ========================================================================== */
+.dock-snap-zones {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.snap-zone {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.snap-zone .snap-indicator {
+  border-radius: 24px;
+  border: 2px dashed rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Left Snap Zone */
+.snap-left {
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 75px;
+  height: 340px;
+}
+.snap-left .snap-indicator {
+  width: 100%;
+  height: 100%;
+}
+
+/* Right Snap Zone */
+.snap-right {
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 75px;
+  height: 340px;
+}
+.snap-right .snap-indicator {
+  width: 100%;
+  height: 100%;
+}
+
+/* Bottom Snap Zone */
+.snap-bottom {
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 70px;
+  width: 500px;
+  max-width: 90vw;
+}
+.snap-bottom .snap-indicator {
+  width: 100%;
+  height: 100%;
+}
+
+/* Active Highlight when pointer is close */
+.snap-zone.active .snap-indicator {
+  border-color: var(--primary-light);
+  background: rgba(16, 185, 129, 0.16);
+  box-shadow: 0 0 35px var(--primary-glow), inset 0 0 20px var(--primary-glow);
+  transform: scale(1.05);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .mac-dock.dock-left,
+  .mac-dock.dock-right,
+  .mac-dock.dock-bottom {
+    top: auto;
+    bottom: 1.25rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 95%;
+    padding: 0.4rem 0.5rem;
+    border-radius: var(--radius-pill);
+  }
+  
+  .mac-dock.dock-left .dock-content,
+  .mac-dock.dock-right .dock-content {
+    flex-direction: row;
+  }
+  
+  .mac-dock.dock-left .nav-links,
+  .mac-dock.dock-right .nav-links {
+    flex-direction: row;
+  }
+  
+  .mac-dock.dock-left .toggles,
+  .mac-dock.dock-right .toggles {
+    flex-direction: row;
+  }
+  
+  .mac-dock.dock-left .dock-divider,
+  .mac-dock.dock-right .dock-divider {
+    width: 1px;
+    height: 22px;
+    margin: 0 0.25rem;
+  }
+  
+  .mac-dock.dock-left .nav-link,
+  .mac-dock.dock-right .nav-link {
+    width: auto;
+    height: auto;
+    padding: 0.6rem 0.75rem;
+  }
+  
+  .dock-tooltip {
+    display: none;
+  }
+}
