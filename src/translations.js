@@ -1,83 +1,99 @@
 export const translations = {
   en: {
-    // Existing generic keys (copy from LifeOS for consistency)
-    Dashboard: "Dashboard",
-    Diet: "Diet",
-    Groceries: "Groceries",
-    Member: "Member",
-    Logout: "Logout",
-    // New portfolio keys
+    // Nav & Section Keys
     Intro: "Andrea Iacolare",
     Experience: "Experience",
     Education: "Education",
     Skills: "Skills",
     TechStack: "Tech Stack",
     Projects: "Projects",
-    Testimonials: "Testimonials",
     Contact: "Contact",
-    // Social & contact labels
+    
+    // Status & Hero
+    AvailableForWork: "Available for new projects & opportunities",
+    HeroGreeting: "Hi, I'm",
+    IntroText: "Full-Stack & AI Developer specializing in modern React interfaces, fast web applications, and intuitive user experiences.",
+    ViewProjects: "Explore Projects",
+    ContactMe: "Get in Touch",
+    CopyEmail: "Copy Email",
+    EmailCopied: "Email copied to clipboard!",
+    
+    // Social & Contact
     Email: "Email",
     Instagram: "Instagram",
     LinkedIn: "LinkedIn",
     GitHub: "GitHub",
-    // Form labels
-    Name: "Name",
-    Message: "Message",
-    Send: "Send",
-    ThankYou: "Thank you! Your message has been sent.",
-    // Placeholder texts
-    IntroText: "I am an AI developer.",
-    ExperienceTitle: "Professional Experience",
-    EducationTitle: "Education",
-    SkillsTitle: "Technical Skills",
-    TechStackTitle: "Tech Stack",
-    ProjectsTitle: "Selected Projects",
-    TestimonialsTitle: "What People Say",
-    ContactTitle: "Get in Touch",
-    // Additional UI strings
+    
+    // Section Titles & Subtitles
+    ExperienceTitle: "Experience & Education",
+    SkillsTitle: "Technical Skills & Arsenal",
+    ProjectsTitle: "Featured Projects",
+    ProjectsSubtitle: "A showcase of web applications and digital platforms crafted with modern technologies.",
+    ContactTitle: "Let's Build Something Great",
+    ContactSubtitle: "Feel free to reach out for collaborations, project inquiries, or just to say hi.",
+    
+    // Project Card
+    LiveDemo: "Live Demo",
+    SourceCode: "Source Code",
+    Featured: "Featured Project",
+    
+    // Skills
+    Languages: "Spoken Languages",
+    Programming: "Development & Web",
+    Tools: "Tools & Environment",
+
+    // Misc
     GoodMorning: "Good Morning",
     GoodAfternoon: "Good Afternoon",
-    GoodEvening: "Good Evening",
-    OverviewToday: "Here’s your overview for today."
+    GoodEvening: "Good Evening"
   },
   it: {
-    // Existing Italian keys (copy from LifeOS)
-    Dashboard: "Dashboard",
-    Diet: "Dieta",
-    Groceries: "Spesa",
-    Member: "Membro",
-    Logout: "Esci",
-    // New portfolio keys
+    // Nav & Section Keys
     Intro: "Andrea Iacolare",
-    Experience: "Esperienza",
+    Experience: "Esperienze",
     Education: "Formazione",
     Skills: "Competenze",
     TechStack: "Tecnologie",
     Projects: "Progetti",
-    Testimonials: "Testimonianze",
     Contact: "Contatti",
-    // Social & contact labels
+    
+    // Status & Hero
+    AvailableForWork: "Disponibile per nuovi progetti e collaborazioni",
+    HeroGreeting: "Ciao, sono",
+    IntroText: "Full-Stack & AI Developer specializzato nella realizzazione di interfacce React moderne, applicazioni web veloci ed esperienze digitali intuitive.",
+    ViewProjects: "Esplora i Progetti",
+    ContactMe: "Contattami",
+    CopyEmail: "Copia Email",
+    EmailCopied: "Email copiata negli appunti!",
+    
+    // Social & Contact
     Email: "Email",
     Instagram: "Instagram",
     LinkedIn: "LinkedIn",
-    // Form labels
-    Name: "Nome",
-    Message: "Messaggio",
-    Send: "Invia",
-    ThankYou: "Grazie! Il tuo messaggio è stato inviato.",
-    // Placeholder texts
-    IntroText: "Sono un developer con l'AI.",
-    ExperienceTitle: "Esperienza Professionale",
-    EducationTitle: "Formazione",
-    SkillsTitle: "Competenze Tecniche",
-    TechStackTitle: "Stack Tecnologico",
+    GitHub: "GitHub",
+    
+    // Section Titles & Subtitles
+    ExperienceTitle: "Esperienza & Formazione",
+    SkillsTitle: "Competenze Tecniche & Stack",
     ProjectsTitle: "Progetti Selezionati",
-    TestimonialsTitle: "Cosa Dicono",
-    ContactTitle: "Contattami",
-    // Additional UI strings
+    ProjectsSubtitle: "Una selezione di applicazioni web e piattaforme realizzate con tecnologie all'avanguardia.",
+    ContactTitle: "Mettiamoci in Contatto",
+    ContactSubtitle: "Hai un'idea o vuoi collaborare? Scrivimi pure tramite email o attraverso i miei canali social.",
+    
+    // Project Card
+    LiveDemo: "Visita Sito",
+    SourceCode: "Codice",
+    Featured: "In Evidenza",
+    
+    // Skills
+    Languages: "Lingue Parlate",
+    Programming: "Sviluppo & Web",
+    Tools: "Strumenti & Ambiente",
+
+    // Misc
     GoodMorning: "Buongiorno",
     GoodAfternoon: "Buon Pomeriggio",
-    GoodEvening: "Buonasera",
-    OverviewToday: "Ecco la tua panoramica per oggi."
+    GoodEvening: "Buonasera"
   }
 };
+
