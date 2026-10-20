@@ -10,6 +10,9 @@ function Experience() {
   const { language } = useContext(SettingsContext);
   const t = translations[language];
 
+  const currentEducation = t.educationData || educationData;
+  const currentExperience = t.experienceData || experienceData;
+
   return (
     <section id="experience-section" className="section experience">
       <div className="section-header">
@@ -27,7 +30,7 @@ function Experience() {
             <span>{t.Education}</span>
           </h3>
           <div className="timeline-stream">
-            {educationData.map((item, idx) => (
+            {currentEducation.map((item, idx) => (
               <div key={`edu-${idx}`} className="timeline-node">
                 <div className="timeline-dot-pulse"></div>
                 <div className="timeline-card">
@@ -51,7 +54,7 @@ function Experience() {
             <span>{t.Experience}</span>
           </h3>
           <div className="timeline-stream">
-            {experienceData.map((item, idx) => (
+            {currentExperience.map((item, idx) => (
               <div key={`exp-${idx}`} className="timeline-node">
                 <div className="timeline-dot-pulse"></div>
                 <div className="timeline-card">

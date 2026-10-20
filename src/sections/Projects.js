@@ -10,6 +10,8 @@ function Projects() {
   const t = translations[language];
   const [imgErrors, setImgErrors] = useState({});
 
+  const activeProjects = t.projectsData || projects;
+
   const handleImageError = (idx) => {
     setImgErrors(prev => ({ ...prev, [idx]: true }));
   };
@@ -44,7 +46,7 @@ function Projects() {
       </div>
 
       <div className="projects-grid">
-        {projects.map((p, idx) => {
+        {activeProjects.map((p, idx) => {
           const hasError = imgErrors[idx] || !p.image;
           const imageUrl = getImageUrl(p.image);
           const domain = getDisplayDomain(p.link);

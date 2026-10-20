@@ -1,14 +1,14 @@
 {
   "languages": {
-    "Italian": "Native",
-    "English": "B1",
-    "Spanish": "B2"
+    "Italiano": "Madrelingua",
+    "Spagnolo": "B2",
+    "Inglese": "B1"
   },
   "tools": [
-    "Browser usage",
+    "Utilizzo del browser",
     "Microsoft Excel",
-    "Social Networks",
-    "Microsoft Office (Word, Excel, PowerPoint, etc.)",
+    "Social Network",
+    "Microsoft Office (Word, Excel, PowerPoint, ecc.)",
     "Windows",
     "Google Chrome",
     "Microsoft Word",
@@ -19,6 +19,6 @@
     "HTML": "Beginner",
     "JavaScript": "Beginner",
     "TypeScript": "Base",
-    "C++": "Intermediate"
+    "C++": "Intermedio"
   }
 }

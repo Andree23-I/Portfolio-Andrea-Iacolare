@@ -23,6 +23,7 @@ import {
 } from 'react-icons/fi';
 import Experience from './Experience';
 import Typewriter from '../components/Typewriter';
+import profilePhoto from '../Foto CV.jpeg';
 
 function Intro() {
   const { language } = useContext(SettingsContext);
@@ -36,7 +37,7 @@ function Intro() {
   const [activeTab, setActiveTab] = useState('profile');
   const [copiedCode, setCopiedCode] = useState(false);
 
-  const email = "iacolareandrea@outlook.it";
+  const email = "iacolareandrea9@gmail.com";
 
   useEffect(() => {
     localStorage.setItem('portfolio_info_view', infoViewMode);
@@ -75,7 +76,7 @@ const developer: DeveloperProfile = {
 ✔ System Status: Ready to collaborate! 
 
 > andrea.contact()
-→ Email: iacolareandrea@outlook.it
+→ Email: iacolareandrea9@gmail.com
 → Status: Online & Accepting new opportunities.`
   };
 
@@ -94,14 +95,19 @@ const developer: DeveloperProfile = {
           <span>{t.AvailableForWork}</span>
         </div>
 
-        {/* Hero Title */}
+        {/* Hero Title with circular profile photo */}
         <h1 className="hero-title">
           <span style={{ display: 'block', fontSize: '0.42em', fontWeight: 500, color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
             {t.HeroGreeting}
           </span>
-          <span className="text-gradient">
-            <Typewriter text={t.Intro} delay={120} />
-          </span>
+          <div className="hero-title-name-row">
+            <div className="hero-avatar-frame">
+              <img src={profilePhoto} alt="Andrea Iacolare" className="hero-avatar-img" />
+            </div>
+            <span className="text-gradient">
+              <Typewriter text={t.Intro} delay={120} />
+            </span>
+          </div>
         </h1>
 
         {/* Hero Bio */}

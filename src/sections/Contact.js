@@ -9,7 +9,9 @@ function Contact() {
   const t = translations[language];
   const [copied, setCopied] = useState(false);
 
-  const email = "iacolareandrea@outlook.it";
+  const email = "iacolareandrea9@gmail.com";
+  const phone = "(+39) 3277074410";
+  const whatsappUrl = "https://wa.me/393277074410";
 
   const handleCopyEmail = (e) => {
     e.preventDefault();
@@ -29,6 +31,17 @@ function Contact() {
       brandGlow: "rgba(6, 182, 212, 0.45)",
       brandBg: "rgba(6, 182, 212, 0.12)",
       brandHoverBg: "#06b6d4"
+    },
+    { 
+      id: "whatsapp",
+      icon: <FiSend />, 
+      label: "WhatsApp / Cell", 
+      hint: phone, 
+      href: whatsappUrl, 
+      brandColor: "#25D366",
+      brandGlow: "rgba(37, 211, 102, 0.45)",
+      brandBg: "rgba(37, 211, 102, 0.12)",
+      brandHoverBg: "#25D366"
     },
     { 
       id: "linkedin",

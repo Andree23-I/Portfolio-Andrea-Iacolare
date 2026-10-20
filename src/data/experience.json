@@ -1,23 +1,16 @@
 [
   {
-    "company": "I.I.S. Galilei di Palo",
-    "role": "Software Developer (Student)",
-    "period": "Sep 2019 – Jul 2024",
-    "location": "Salerno, Italy",
-    "description": "Sviluppo di applicazioni software, manutenzione di computer, sviluppo di siti web con WordPress, basi di HTML, CSS, JavaScript, e primi approcci a Unity e Unreal Engine 5. Inoltre, programmazione di videogiochi digitali con il framework Phaser e gestione di database."
+    "company": "Dakyo",
+    "role": "Stage - Web Developer",
+    "period": "01/02/2025 – 30/04/2025",
+    "location": "Siviglia, Spagna",
+    "description": "Gestione e aggiornamento del sito web aziendale tramite la piattaforma Wix.com. Organizzazione, elaborazione e analisi dei dati aziendali tramite l'utilizzo di Microsoft Excel."
   },
   {
     "company": "Beer & Dreams",
-    "role": "Web Developer",
-    "period": "Oct 2024 – Dec 2024",
-    "location": "Salerno, Italy",
-    "description": "Sviluppo e manutenzione di siti WordPress per l'azienda, personalizzazione di temi e plugin, ottimizzazione SEO e gestione dei contenuti."
-  },
-  {
-    "company": "Dakyo",
-    "role": "Web Developer",
-    "period": "Feb 2025 – Apr 2025",
-    "location": "Siviglia, Spain",
-    "description": "Gestione e aggiornamento del sito aziendale tramite Wix.com, organizzazione e analisi di dati con Microsoft Excel, supporto nella creazione di contenuti web."
+    "role": "Stage - E-commerce Specialist & Web",
+    "period": "18/10/2024 – 18/12/2024",
+    "location": "Siviglia, Spagna",
+    "description": "Gestione di un e-commerce con WordPress, personalizzazione dei contenuti e manutenzione della piattaforma online."
   }
 ]

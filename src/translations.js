@@ -94,7 +94,66 @@ export const translations = {
     DockLayoutTitle: "Navigation Dock Position",
     DockTip: "Tip: You can also drag & drop the dock directly to any screen edge!",
     SettingsClose: "Close",
-    ActiveBadge: "Active"
+    ActiveBadge: "Active",
+    // Experience & Education Data
+    experienceData: [
+      {
+        company: "Dakyo",
+        role: "Internship - Web Developer",
+        period: "01/02/2025 – 30/04/2025",
+        location: "Seville, Spain",
+        description: "Management and maintenance of the corporate website via Wix.com platform. Organization, processing, and analysis of corporate data using Microsoft Excel."
+      },
+      {
+        company: "Beer & Dreams",
+        role: "Internship - E-commerce Specialist & Web",
+        period: "18/10/2024 – 18/12/2024",
+        location: "Seville, Spain",
+        description: "Management of an e-commerce website with WordPress, content personalization, and online platform maintenance."
+      }
+    ],
+    educationData: [
+      {
+        institution: "I.I.S. Galilei Di Palo",
+        degree: "Computer Science Diploma / IT Expert",
+        period: "11/09/2019 – 05/07/2024",
+        location: "Salerno, Italy",
+        details: "Technical education focusing on software programming, web development, graphics fundamentals, and IT systems management."
+      }
+    ],
+    skillsData: {
+      languages: {
+        "Italian": "Native",
+        "Spanish": "B2",
+        "English": "B1"
+      },
+      tools: [
+        "Web Browsers",
+        "Microsoft Excel",
+        "Social Networks",
+        "Microsoft Office (Word, Excel, PowerPoint, etc.)",
+        "Windows",
+        "Google Chrome",
+        "Microsoft Word",
+        "Visual Studio",
+        "Visual Studio Code"
+      ],
+      programming: {
+        "HTML": "Beginner",
+        "JavaScript": "Beginner",
+        "TypeScript": "Base",
+        "C++": "Intermediate"
+      }
+    },
+    projectsData: [
+      {
+        title: "Foto Extracolor",
+        description: "Photography studio showcase website with integrated portfolio and services.",
+        techStack: ["React", "CSS", "Vite"],
+        link: "https://www.fotoextracolor.com",
+        image: "fotoextracolor.jpeg"
+      }
+    ]
   },
   it: {
     // Nav & Section Keys
@@ -191,7 +250,67 @@ export const translations = {
     WhatIDo2Title: "AI & Automazioni Intelligenti",
     WhatIDo2Desc: "Integrazione di modelli AI, assistenti virtuali e flussi di lavoro automatizzati.",
     WhatIDo3Title: "Backend Stabile & Database",
-    WhatIDo3Desc: "Logiche applicative sicure, gestione dati e API veloci per far funzionare ogni servizio."
+    WhatIDo3Desc: "Logiche applicative sicure, gestione dati e API veloci per far funzionare ogni servizio.",
+
+    // Experience & Education Data
+    experienceData: [
+      {
+        company: "Dakyo",
+        role: "Stage - Web Developer",
+        period: "01/02/2025 – 30/04/2025",
+        location: "Siviglia, Spagna",
+        description: "Gestione e aggiornamento del sito web aziendale tramite la piattaforma Wix.com. Organizzazione, elaborazione e analisi dei dati aziendali tramite l'utilizzo di Microsoft Excel."
+      },
+      {
+        company: "Beer & Dreams",
+        role: "Stage - E-commerce Specialist & Web",
+        period: "18/10/2024 – 18/12/2024",
+        location: "Siviglia, Spagna",
+        description: "Gestione di un e-commerce con WordPress, personalizzazione dei contenuti e manutenzione della piattaforma online."
+      }
+    ],
+    educationData: [
+      {
+        institution: "I.I.S. Galilei Di Palo",
+        degree: "Perito Informatico",
+        period: "11/09/2019 – 05/07/2024",
+        location: "Salerno, Italia",
+        details: "Formazione tecnica con focus su programmazione, sviluppo web, basi di grafica e gestione di sistemi informatici."
+      }
+    ],
+    skillsData: {
+      languages: {
+        "Italiano": "Madrelingua",
+        "Spagnolo": "B2",
+        "Inglese": "B1"
+      },
+      tools: [
+        "Utilizzo del browser",
+        "Microsoft Excel",
+        "Social Network",
+        "Microsoft Office (Word, Excel, PowerPoint, ecc.)",
+        "Windows",
+        "Google Chrome",
+        "Microsoft Word",
+        "Visual Studio",
+        "Visual Studio Code"
+      ],
+      programming: {
+        "HTML": "Beginner",
+        "JavaScript": "Beginner",
+        "TypeScript": "Base",
+        "C++": "Intermedio"
+      }
+    },
+    projectsData: [
+      {
+        title: "Foto Extracolor",
+        description: "Sito web showcase per studio fotografico con portfolio integrato e presentazione servizi.",
+        techStack: ["React", "CSS", "Vite"],
+        link: "https://www.fotoextracolor.com",
+        image: "fotoextracolor.jpeg"
+      }
+    ]
   }
 };
 

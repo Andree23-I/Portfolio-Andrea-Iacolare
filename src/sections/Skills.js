@@ -8,7 +8,8 @@ import { FiCode, FiCpu, FiGlobe, FiTool } from 'react-icons/fi';
 function Skills() {
   const { language } = useContext(SettingsContext);
   const t = translations[language];
-  const { languages, tools, programming } = skillsData;
+  const activeSkills = t.skillsData || skillsData;
+  const { languages, tools, programming } = activeSkills;
 
   const categories = [
     { 
