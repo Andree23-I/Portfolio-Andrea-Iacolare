@@ -12,12 +12,5 @@
     "techStack": ["React", "CSS", "Vite"],
     "link": "https://www.fotoextracolor.com",
     "image": "fotoextracolor.jpeg"
-  },
-  {
-    "title": "Life Os",
-    "description": "Lifestyle and personal habit dashboard for diet, health, and task organization.",
-    "techStack": ["React", "Context API", "LocalStorage"],
-    "link": "https://andree23-i.github.io/LifeOs-react/",
-    "image": "lifeOsImg.png"
   }
 ]

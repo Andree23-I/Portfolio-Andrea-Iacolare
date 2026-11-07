@@ -161,13 +161,6 @@ export const translations = {
         techStack: ["React", "CSS", "Vite"],
         link: "https://www.fotoextracolor.com",
         image: "fotoextracolor.jpeg"
-      },
-      {
-        title: "Life Os",
-        description: "Lifestyle and personal habit dashboard for diet, health, and task organization.",
-        techStack: ["React", "Context API", "LocalStorage"],
-        link: "https://andree23-i.github.io/LifeOs-react/",
-        image: "lifeOsImg.png"
       }
     ]
   },
@@ -334,13 +327,6 @@ export const translations = {
         techStack: ["React", "CSS", "Vite"],
         link: "https://www.fotoextracolor.com",
         image: "fotoextracolor.jpeg"
-      },
-      {
-        title: "Life Os",
-        description: "Dashboard personale e lifestyle per la gestione di abitudini quotidiane, alimentazione e note.",
-        techStack: ["React", "Context API", "LocalStorage"],
-        link: "https://andree23-i.github.io/LifeOs-react/",
-        image: "lifeOsImg.png"
       }
     ]
   }
