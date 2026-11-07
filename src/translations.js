@@ -36,6 +36,8 @@ export const translations = {
     LiveDemo: "Live Demo",
     SourceCode: "Source Code",
     Featured: "Featured Project",
+    CardStackHint: "✦ Drag card, click side cards, or use arrow keys to browse",
+    ActiveProject: "Active Project Details",
     
     // Skills
     Languages: "Spoken Languages",
@@ -159,6 +161,13 @@ export const translations = {
         techStack: ["React", "CSS", "Vite"],
         link: "https://www.fotoextracolor.com",
         image: "fotoextracolor.jpeg"
+      },
+      {
+        title: "Life Os",
+        description: "Lifestyle and personal habit dashboard for diet, health, and task organization.",
+        techStack: ["React", "Context API", "LocalStorage"],
+        link: "https://andree23-i.github.io/LifeOs-react/",
+        image: "lifeOsImg.png"
       }
     ]
   },
@@ -199,6 +208,8 @@ export const translations = {
     LiveDemo: "Visita Sito",
     SourceCode: "Codice",
     Featured: "In Evidenza",
+    CardStackHint: "✦ Trascina la scheda, clicca sui lati o usa le frecce per sfogliare",
+    ActiveProject: "Dettaglio Progetto Selezionato",
     
     // Skills
     Languages: "Lingue Parlate",
@@ -323,6 +334,13 @@ export const translations = {
         techStack: ["React", "CSS", "Vite"],
         link: "https://www.fotoextracolor.com",
         image: "fotoextracolor.jpeg"
+      },
+      {
+        title: "Life Os",
+        description: "Dashboard personale e lifestyle per la gestione di abitudini quotidiane, alimentazione e note.",
+        techStack: ["React", "Context API", "LocalStorage"],
+        link: "https://andree23-i.github.io/LifeOs-react/",
+        image: "lifeOsImg.png"
       }
     ]
   }

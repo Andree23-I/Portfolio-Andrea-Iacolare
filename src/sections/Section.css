@@ -811,6 +811,106 @@ body.light-theme .browser-address-bar {
   flex: 1;
 }
 
+
+/* ==========================================================================
+   Projects 3D Carousel & Spotlight Enhancements
+   ========================================================================== */
+.projects-carousel-wrapper {
+  width: 100%;
+  margin-bottom: 2.5rem;
+  overflow: visible;
+}
+
+.active-project-spotlight {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1.75rem 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  box-shadow: var(--shadow-soft);
+  animation: fadeIn 0.4s ease both;
+}
+
+.spotlight-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.spotlight-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.spotlight-index-pill {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--primary-light);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.spotlight-domain {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.spotlight-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.spotlight-info {
+  flex: 1;
+}
+
+.spotlight-info h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.spotlight-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.spotlight-action {
+  flex-shrink: 0;
+}
+
+.spotlight-action .btn-primary {
+  padding: 0.8rem 1.6rem;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 680px) {
+  .spotlight-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .spotlight-action .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* ==========================================================================
    Skills Section
    ========================================================================== */

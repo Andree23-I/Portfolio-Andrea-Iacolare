@@ -6,6 +6,7 @@
   "dependencies": {
     "@formspree/react": "^3.0.0",
     "cra-template-pwa": "2.0.0",
+    "framer-motion": "^14.10.1",
     "lodash": "^4.18.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
