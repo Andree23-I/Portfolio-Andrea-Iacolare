@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Neo Grid Pattern -->
+    <pattern id="neoGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#e2e8f0" stroke-width="1.2" />
+    </pattern>
+    <style>
+      .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      .font-sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+      .bold { font-weight: 800; }
+      .black { font-weight: 900; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="675" fill="#ffffff" />
+  <rect width="1200" height="675" fill="url(#neoGrid)" opacity="0.65" />
+
+  <!-- Subtle glow in top right -->
+  <circle cx="1050" cy="150" r="280" fill="#1c9cf0" opacity="0.08" filter="blur(40px)" />
+
+  <!-- Studio Header Bar -->
+  <g id="header">
+    <rect x="0" y="0" width="1200" height="76" fill="#ffffff" opacity="0.96" />
+    <line x1="0" y1="76" x2="1200" y2="76" stroke="#000000" stroke-width="3" />
+    
+    <!-- Brand Logo Monogram -->
+    <g transform="translate(60, 16)">
+      <!-- S Logo Box -->
+      <rect x="4" y="4" width="44" height="44" rx="10" fill="#000000" />
+      <rect x="0" y="0" width="44" height="44" rx="10" fill="#1c9cf0" stroke="#000000" stroke-width="2.5" />
+      <path d="M 30 14 L 19 14 C 15.5 14 13.5 16 13.5 19.5 C 13.5 23 15.5 25 19 25 L 27 25 C 30.5 25 32.5 27 32.5 30.5 C 32.5 34 30.5 36 27 36 L 15 36" fill="none" stroke="#000000" stroke-width="6" stroke-linecap="square" transform="translate(1, 1)" />
+      <path d="M 30 14 L 19 14 C 15.5 14 13.5 16 13.5 19.5 C 13.5 23 15.5 25 19 25 L 27 25 C 30.5 25 32.5 27 32.5 30.5 C 32.5 34 30.5 36 27 36 L 15 36" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="square" />
+      <circle cx="34" cy="36" r="2.5" fill="#000000" />
+      <circle cx="33.5" cy="35.5" r="2.2" fill="#ffffff" />
+    </g>
+
+    <!-- Brand Name -->
+    <text x="120" y="47" class="font-mono black" font-size="24" fill="#000000" letter-spacing="-0.5">southdv<tspan fill="#1c9cf0">.studio</tspan></text>
+
+    <!-- Salerno badge -->
+    <g transform="translate(305, 23)">
+      <rect x="2" y="2" width="105" height="26" fill="#000000" />
+      <rect x="0" y="0" width="105" height="26" fill="#1c9cf0" stroke="#000000" stroke-width="1.8" />
+      <text x="52.5" y="18" class="font-mono bold" font-size="11" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">SALERNO · IT</text>
+    </g>
+
+    <!-- Nav Bar Mock -->
+    <g transform="translate(730, 18)">
+      <rect x="3" y="3" width="410" height="40" rx="20" fill="#000000" />
+      <rect x="0" y="0" width="410" height="40" rx="20" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      
+      <!-- Active Pill -->
+      <rect x="6" y="5" width="85" height="30" rx="15" fill="#1c9cf0" stroke="#000000" stroke-width="1.8" />
+      <text x="48.5" y="25" class="font-mono bold" font-size="12" fill="#ffffff" text-anchor="middle">HOME</text>
+      <text x="145" y="25" class="font-mono bold" font-size="12" fill="#475569">SERVIZI</text>
+      <text x="240" y="25" class="font-mono bold" font-size="12" fill="#475569">PREZZI</text>
+      <text x="345" y="25" class="font-mono bold" font-size="12" fill="#475569">CONTATTI</text>
+    </g>
+  </g>
+
+  <!-- Hero Main Content -->
+  <!-- Tagline Badge -->
+  <g transform="translate(60, 120)">
+    <rect x="4" y="4" width="455" height="36" fill="#000000" />
+    <rect x="0" y="0" width="455" height="36" fill="#ffffff" stroke="#000000" stroke-width="2.5" />
+    <text x="20" y="24" class="font-mono bold" font-size="13" fill="#000000" letter-spacing="0.5">
+      <tspan fill="#1c9cf0">✦</tspan> SVILUPPO WEB AD ABBONAMENTO · <tspan fill="#1c9cf0">ZERO ANTICIPO</tspan>
+    </text>
+  </g>
+
+  <!-- Main Headline -->
+  <text x="60" y="215" class="font-sans black" font-size="52" fill="#000000" letter-spacing="-1.5">
+    Il tuo nuovo sito web.
+  </text>
+  <text x="60" y="275" class="font-sans black" font-size="52" fill="#000000" letter-spacing="-1.5">
+    Da <tspan fill="#1c9cf0">59,99€</tspan> al mese. Zero anticipo.
+  </text>
+
+  <!-- Subtitle Paragraph -->
+  <text x="60" y="325" class="font-sans" font-weight="500" font-size="19" fill="#475569">
+    Dimentica i vecchi preventivi da 3.000€ e le brutte sorprese. Progettiamo, ospitiamo
+  </text>
+  <text x="60" y="352" class="font-sans" font-weight="500" font-size="19" fill="#475569">
+    e gestiamo il sito della tua attività con tecnologia Next.js moderna e canone chiaro.
+  </text>
+
+  <!-- CTA Buttons -->
+  <g transform="translate(60, 390)">
+    <!-- Primary CTA Button -->
+    <g>
+      <rect x="5" y="5" width="235" height="52" fill="#000000" />
+      <rect x="0" y="0" width="235" height="52" fill="#1c9cf0" stroke="#000000" stroke-width="2.5" />
+      <text x="117.5" y="33" class="font-mono bold" font-size="15" fill="#ffffff" text-anchor="middle" letter-spacing="0.3">Richiedi Bozza Gratuita →</text>
+    </g>
+
+    <!-- Secondary CTA Button -->
+    <g transform="translate(265, 0)">
+      <rect x="5" y="5" width="180" height="52" fill="#000000" />
+      <rect x="0" y="0" width="180" height="52" fill="#ffffff" stroke="#000000" stroke-width="2.5" />
+      <text x="90" y="33" class="font-mono bold" font-size="15" fill="#000000" text-anchor="middle">Esplora i Piani</text>
+    </g>
+  </g>
+
+  <!-- Feature Marquee / Ticker -->
+  <g transform="translate(60, 475)">
+    <rect x="0" y="0" width="1080" height="38" fill="#000000" />
+    <text x="25" y="24" class="font-mono bold" font-size="11.5" fill="#ffffff" letter-spacing="1">
+      NEXT.JS 15 ■ ZERO ANTICIPO ■ HOSTING CLOUD INCLUSO ■ DOMINIO &amp; SSL ■ CONSEGNA IN 7 GIORNI ■ 100% GESTITO
+    </text>
+  </g>
+
+  <!-- 4 Neo-Brutalist Value Metric Cards -->
+  <g transform="translate(60, 535)">
+    <!-- Card 1 -->
+    <g transform="translate(0, 0)">
+      <rect x="4" y="4" width="250" height="95" fill="#000000" />
+      <rect x="0" y="0" width="250" height="95" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="20" y="42" class="font-sans black" font-size="30" fill="#1c9cf0">0€</text>
+      <text x="20" y="70" class="font-mono bold" font-size="13" fill="#000000">Anticipo Iniziale</text>
+      <text x="20" y="84" class="font-sans" font-size="11" fill="#64748b">Paghi solo a sito approvato</text>
+    </g>
+
+    <!-- Card 2 -->
+    <g transform="translate(275, 0)">
+      <rect x="4" y="4" width="250" height="95" fill="#000000" />
+      <rect x="0" y="0" width="250" height="95" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="20" y="42" class="font-sans black" font-size="30" fill="#000000">7 Giorni</text>
+      <text x="20" y="70" class="font-mono bold" font-size="13" fill="#000000">Consegna Rapida</text>
+      <text x="20" y="84" class="font-sans" font-size="11" fill="#64748b">Dalla bozza al go-live online</text>
+    </g>
+
+    <!-- Card 3 -->
+    <g transform="translate(550, 0)">
+      <rect x="4" y="4" width="250" height="95" fill="#000000" />
+      <rect x="0" y="0" width="250" height="95" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="20" y="42" class="font-sans black" font-size="30" fill="#1c9cf0">100%</text>
+      <text x="20" y="70" class="font-mono bold" font-size="13" fill="#000000">Gestito &amp; Sicuro</text>
+      <text x="20" y="84" class="font-sans" font-size="11" fill="#64748b">Hosting, SSL e manutenzione</text>
+    </g>
+
+    <!-- Card 4 -->
+    <g transform="translate(825, 0)">
+      <rect x="4" y="4" width="255" height="95" fill="#000000" />
+      <rect x="0" y="0" width="255" height="95" fill="#ffffff" stroke="#000000" stroke-width="2" />
+      <text x="20" y="42" class="font-sans black" font-size="30" fill="#000000">&lt; 0.5s</text>
+      <text x="20" y="70" class="font-mono bold" font-size="13" fill="#000000">Velocità Mobile</text>
+      <text x="20" y="84" class="font-sans" font-size="11" fill="#64748b">Performance Core Web Vitals</text>
+    </g>
+  </g>
+</svg>

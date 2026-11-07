@@ -147,6 +147,13 @@ export const translations = {
     },
     projectsData: [
       {
+        title: "southdv.studio",
+        description: "Modern web development studio on a transparent monthly subscription. High-performance showcase websites and e-commerce with zero upfront cost and full management.",
+        techStack: ["Next.js", "React", "Tailwind CSS", "Vercel"],
+        link: "https://southdvstudio.vercel.app",
+        image: "southdvstudio.svg"
+      },
+      {
         title: "Foto Extracolor",
         description: "Photography studio showcase website with integrated portfolio and services.",
         techStack: ["React", "CSS", "Vite"],
@@ -303,6 +310,13 @@ export const translations = {
       }
     },
     projectsData: [
+      {
+        title: "southdv.studio",
+        description: "Studio indipendente di sviluppo web moderno ad abbonamento mensile. Siti vetrina ed e-commerce performanti con zero anticipo e gestione all-inclusive.",
+        techStack: ["Next.js", "React", "Tailwind CSS", "Vercel"],
+        link: "https://southdvstudio.vercel.app",
+        image: "southdvstudio.svg"
+      },
       {
         title: "Foto Extracolor",
         description: "Sito web showcase per studio fotografico con portfolio integrato e presentazione servizi.",

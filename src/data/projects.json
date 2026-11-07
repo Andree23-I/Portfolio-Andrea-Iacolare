@@ -1,5 +1,12 @@
 [
   {
+    "title": "southdv.studio",
+    "description": "Modern web development studio on a transparent monthly subscription. High-performance showcase websites and e-commerce with zero upfront cost and full management.",
+    "techStack": ["Next.js", "React", "Tailwind CSS", "Vercel"],
+    "link": "https://southdvstudio.vercel.app",
+    "image": "southdvstudio.svg"
+  },
+  {
     "title": "Foto Extracolor",
     "description": "Photography studio showcase website with integrated portfolio and services.",
     "techStack": ["React", "CSS", "Vite"],
