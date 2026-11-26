@@ -1,0 +1,309 @@
+/* ==========================================================================
+   HANGING GLASS GALLERY PORTAL - KEDHARESWER 3D ADAPTATION
+   Interactive Opening Experience for Andrea Iacolare Portfolio
+   ========================================================================== */
+
+.hanging-glass-portal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 32%, #181615 0%, #0d0c0b 58%, #060505 100%);
+  color: #f2efe9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: portalFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+@keyframes portalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.portal-fading-out {
+  animation: portalFadeOut 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes portalFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.08);
+    filter: blur(12px);
+  }
+}
+
+/* Three.js Canvas */
+.hgg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+  cursor: grab;
+}
+
+.hgg-canvas:active {
+  cursor: grabbing;
+}
+
+/* Top Bar */
+.portal-top-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2.5rem;
+  background: linear-gradient(to bottom, rgba(7, 6, 6, 0.9) 0%, rgba(7, 6, 6, 0) 100%);
+  gap: 1rem;
+}
+
+.portal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--radius-pill, 9999px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: #f2efe9;
+}
+
+.portal-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff4b26;
+  box-shadow: 0 0 10px #ff4b26;
+  animation: pulsePortalDot 1.8s infinite ease-in-out;
+}
+
+@keyframes pulsePortalDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.portal-skip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-pill, 9999px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-skip-btn:hover {
+  background: var(--primary, #ff4b26);
+  border-color: var(--primary, #ff4b26);
+  box-shadow: 0 0 20px rgba(255, 75, 38, 0.45);
+  transform: translateY(-2px);
+}
+
+.portal-close-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f2efe9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.portal-close-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: rotate(90deg);
+}
+
+/* Bottom Copy & Controls */
+.portal-bottom-copy {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 4.5rem 3rem 2.5rem;
+  background: linear-gradient(to top, rgba(7, 6, 6, 0.95) 0%, rgba(7, 6, 6, 0.75) 50%, rgba(7, 6, 6, 0) 100%);
+  gap: 2rem;
+  pointer-events: none;
+}
+
+.copy-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-width: 680px;
+  pointer-events: auto;
+}
+
+.copy-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--primary, #ff4b26);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.copy-title {
+  margin: 0;
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.copy-caption {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(242, 239, 233, 0.7);
+  line-height: 1.5;
+  max-width: 520px;
+}
+
+.active-destination-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-sm, 8px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 0.5rem;
+  width: fit-content;
+  backdrop-filter: blur(10px);
+}
+
+.dest-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.dest-name {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.dest-action {
+  font-size: 0.75rem;
+  color: rgba(242, 239, 233, 0.6);
+}
+
+.copy-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1.25rem;
+  pointer-events: auto;
+}
+
+.destination-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.counter-num {
+  color: #ffffff;
+  font-size: 2.2rem;
+}
+
+.counter-sep {
+  color: var(--primary, #ff4b26);
+  font-weight: 400;
+}
+
+.counter-total {
+  color: rgba(242, 239, 233, 0.4);
+}
+
+.direct-enter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-pill, 9999px);
+  border: none;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 8px 30px -5px rgba(0, 0, 0, 0.7);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+}
+
+.direct-enter-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .portal-top-bar {
+    padding: 1rem 1.25rem;
+  }
+
+  .portal-bottom-copy {
+    padding: 2.5rem 1.25rem 1.5rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+
+  .copy-right {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .copy-title {
+    font-size: 1.6rem;
+  }
+
+  .copy-caption {
+    font-size: 0.85rem;
+  }
+}

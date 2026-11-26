@@ -1170,6 +1170,43 @@ body.light-theme .wordmark-ghost {
 }
 
 /* Luxury Editorial Buttons */
+.btn-editorial-portal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.85rem;
+  background: rgba(255, 75, 38, 0.14);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 0 20px -3px var(--primary-glow);
+  backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-editorial-portal:hover {
+  background: var(--primary);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px var(--primary-glow);
+}
+
+.portal-icon-spin {
+  font-size: 1rem;
+  transition: transform 0.4s ease;
+}
+
+.btn-editorial-portal:hover .portal-icon-spin {
+  transform: rotate(180deg);
+}
+
 .btn-editorial-primary {
   display: inline-flex;
   align-items: center;

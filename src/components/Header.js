@@ -9,7 +9,8 @@ import {
   FiUser, 
   FiCode, 
   FiLayers, 
-  FiMail
+  FiMail,
+  FiCompass
 } from 'react-icons/fi';
 import './Header.css';
 
@@ -20,17 +21,23 @@ const navItems = [
   { path: '/contact', sectionId: 'contact', labelKey: 'Contact', num: '04', icon: <FiMail /> },
 ];
 
-function Header() {
+function Header({ onOpenPortal }) {
   const { 
     theme, 
     toggleTheme, 
     language, 
-    toggleLanguage
+    toggleLanguage,
+    openPortal
   } = useContext(SettingsContext);
 
   const location = useLocation();
   const navigate = useNavigate();
   const t = translations[language] || translations.it;
+
+  const handleOpenPortalClick = () => {
+    if (onOpenPortal) onOpenPortal();
+    else if (openPortal) openPortal();
+  };
 
   const handleLinkClick = (e, item) => {
     // If on intro page and section element exists, smooth scroll to it
@@ -93,8 +100,18 @@ function Header() {
 
         <div className="command-divider" />
 
-        {/* Global Controls: Language & Theme */}
+        {/* Global Controls: Portal, Language & Theme */}
         <div className="command-actions">
+          <button 
+            onClick={handleOpenPortalClick} 
+            className="command-btn command-btn-portal" 
+            title={language === 'en' ? 'Open 3D Destination Gallery' : 'Apri Galleria 3D di Scelta'}
+            aria-label="Open 3D Destination Gallery"
+          >
+            <FiCompass className="command-btn-icon portal-compass-icon" />
+            <span className="command-portal-text">PORTAL</span>
+          </button>
+
           <button 
             onClick={toggleLanguage} 
             className="command-btn command-btn-lang" 

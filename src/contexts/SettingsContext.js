@@ -7,6 +7,7 @@ export const SettingsProvider = ({ children }) => {
   const [language, setLanguage] = useState('it');
   const [dockPos, setDockPos] = useState('bottom');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPortalOpen, setIsPortalOpen] = useState(true);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('lifeplanner_theme');
@@ -35,6 +36,8 @@ export const SettingsProvider = ({ children }) => {
   const toggleLanguage = () => setLanguage(prev => prev === 'en' ? 'it' : 'en');
   const openSettings = () => setIsSettingsOpen(true);
   const closeSettings = () => setIsSettingsOpen(false);
+  const openPortal = () => setIsPortalOpen(true);
+  const closePortal = () => setIsPortalOpen(false);
 
   return (
     <SettingsContext.Provider value={{ 
@@ -49,7 +52,11 @@ export const SettingsProvider = ({ children }) => {
       isSettingsOpen,
       setIsSettingsOpen,
       openSettings,
-      closeSettings
+      closeSettings,
+      isPortalOpen,
+      setIsPortalOpen,
+      openPortal,
+      closePortal
     }}>
       {children}
     </SettingsContext.Provider>

@@ -195,6 +195,36 @@ body.light-theme .command-link.active {
   transform: translateY(-1px);
 }
 
+.command-btn-portal {
+  background: rgba(255, 75, 38, 0.12);
+  border-color: rgba(255, 75, 38, 0.35);
+  color: var(--primary);
+  font-weight: 700;
+  gap: 0.35rem;
+}
+
+.command-btn-portal:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 0 16px var(--primary-glow);
+}
+
+.portal-compass-icon {
+  font-size: 0.95rem;
+  transition: transform 0.4s ease;
+}
+
+.command-btn-portal:hover .portal-compass-icon {
+  transform: rotate(180deg);
+}
+
+.command-portal-text {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
 .command-btn-icon {
   font-size: 0.9rem;
 }

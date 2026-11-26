@@ -21,10 +21,11 @@ import {
   FiLayers,
   FiAward,
   FiMessageSquare,
-  FiRadio
+  FiRadio,
+  FiCompass
 } from 'react-icons/fi';
 
-export default function Intro() {
+export default function Intro({ onOpenPortal }) {
   const { language } = useContext(SettingsContext);
   const t = translations[language] || translations.it;
   
@@ -204,6 +205,17 @@ export default function Intro() {
 
         {/* Hero Bottom Navigation & Shutter Trigger Strip */}
         <div className="hero-action-strip">
+          {onOpenPortal && (
+            <button 
+              className="btn-editorial-portal"
+              onClick={onOpenPortal}
+              title={language === 'en' ? 'Open 3D Destination Gallery' : 'Apri Galleria 3D di Scelta'}
+            >
+              <FiCompass className="portal-icon-spin" />
+              <span>{language === 'en' ? 'CHOOSE EXPERIENCE' : 'SCEGLI DESTINAZIONE 3D'}</span>
+            </button>
+          )}
+
           <button 
             className="btn-editorial-primary"
             onClick={() => scrollToSection('work')}
