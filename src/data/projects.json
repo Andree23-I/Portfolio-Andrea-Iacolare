@@ -1,9 +1,9 @@
 [
   {
     "title": "southdv.studio",
-    "description": "Modern web development studio on a transparent monthly subscription. High-performance showcase websites and e-commerce with zero upfront cost and full management.",
+    "description": "Studio indipendente di sviluppo web moderno a Salerno e online. Siti vetrina ed e-commerce ultra-veloci in Next.js 15, codice 100% tuo con acquisto una tantum da 599€ o formula abbonamento con zero anticipo.",
     "techStack": ["Next.js", "React", "Tailwind CSS", "Vercel"],
-    "link": "https://southdvstudio.vercel.app",
+    "link": "https://southdvstudio.eu",
     "image": "southdvstudio.svg"
   },
   {
