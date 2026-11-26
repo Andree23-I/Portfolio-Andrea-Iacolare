@@ -1,24 +1,26 @@
 {
   "languages": {
     "Italiano": "Madrelingua",
-    "Spagnolo": "B2",
-    "Inglese": "B1"
+    "Spagnolo": "B2 Working",
+    "Inglese": "B1 Technical"
   },
   "tools": [
-    "Utilizzo del browser",
-    "Microsoft Excel",
-    "Social Network",
-    "Microsoft Office (Word, Excel, PowerPoint, ecc.)",
-    "Windows",
-    "Google Chrome",
-    "Microsoft Word",
-    "Visual Studio",
-    "Visual Studio Code"
+    "Git & GitHub",
+    "VS Code",
+    "Antigravity",
+    "Vercel Cloud",
+    "REST APIs & JSON",
+    "Chrome DevTools",
+    "Microsoft Excel"
   ],
   "programming": {
-    "HTML": "Beginner",
-    "JavaScript": "Beginner",
+    "React 18": "Advanced",
+    "Next.js 15": "Production",
     "TypeScript": "Base",
+    "JavaScript ES6+": "Advanced",
+    "Tailwind CSS v4": "Production",
+    "HTML5 & Modern CSS": "Mastery",
+    "Vite": "Production",
     "C++": "Intermedio"
   }
 }

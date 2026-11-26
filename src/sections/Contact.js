@@ -1,16 +1,24 @@
 import React, { useContext, useState } from 'react';
 import { SettingsContext } from '../contexts/SettingsContext';
 import { translations } from '../translations';
-import { FiGithub, FiLinkedin, FiInstagram, FiMail, FiArrowRight, FiCheck, FiSend } from 'react-icons/fi';
+import { 
+  FiGithub, 
+  FiLinkedin, 
+  FiInstagram, 
+  FiMail, 
+  FiArrowUpRight, 
+  FiCheck, 
+  FiSend
+} from 'react-icons/fi';
 import './Section.css';
 
 function Contact() {
   const { language } = useContext(SettingsContext);
-  const t = translations[language];
+  const t = translations[language] || translations.it;
   const [copied, setCopied] = useState(false);
 
   const email = "iacolareandrea9@gmail.com";
-  const phone = "(+39) 3277074410";
+  const phone = "(+39) 327 707 4410";
   const whatsappUrl = "https://wa.me/393277074410";
 
   const handleCopyEmail = (e) => {
@@ -24,57 +32,42 @@ function Contact() {
     { 
       id: "email",
       icon: <FiMail />, 
-      label: t.Email, 
+      label: language === 'en' ? "Direct Email" : "Email Diretta", 
       hint: email, 
-      href: `mailto:${email}`, 
-      brandColor: "#06b6d4",
-      brandGlow: "rgba(6, 182, 212, 0.45)",
-      brandBg: "rgba(6, 182, 212, 0.12)",
-      brandHoverBg: "#06b6d4"
+      href: `mailto:${email}`,
+      actionLabel: copied ? (language === 'en' ? "Copied!" : "Copiata!") : (language === 'en' ? "Send Mail ↗" : "Invia Email ↗")
     },
     { 
       id: "whatsapp",
       icon: <FiSend />, 
-      label: "WhatsApp / Cell", 
+      label: "WhatsApp / Direct Phone", 
       hint: phone, 
-      href: whatsappUrl, 
-      brandColor: "#25D366",
-      brandGlow: "rgba(37, 211, 102, 0.45)",
-      brandBg: "rgba(37, 211, 102, 0.12)",
-      brandHoverBg: "#25D366"
+      href: whatsappUrl,
+      actionLabel: language === 'en' ? "Open Chat ↗" : "Apri Chat ↗"
     },
     { 
       id: "linkedin",
       icon: <FiLinkedin />, 
-      label: t.LinkedIn, 
+      label: "LinkedIn Professional", 
       hint: "andrea-iacolare", 
-      href: "https://www.linkedin.com/in/andrea-iacolare-a626a233a/", 
-      brandColor: "#0a66c2",
-      brandGlow: "rgba(10, 102, 194, 0.5)",
-      brandBg: "rgba(10, 102, 194, 0.12)",
-      brandHoverBg: "#0a66c2"
+      href: "https://www.linkedin.com/in/andrea-iacolare-a626a233a/",
+      actionLabel: language === 'en' ? "Connect ↗" : "Collegati ↗"
     },
     { 
       id: "github",
       icon: <FiGithub />, 
-      label: t.GitHub || 'GitHub', 
+      label: "GitHub Source & Repos", 
       hint: "@andree23-i", 
-      href: "https://github.com/andree23-i", 
-      brandColor: "#f0f6fc",
-      brandGlow: "rgba(240, 246, 252, 0.35)",
-      brandBg: "rgba(255, 255, 255, 0.08)",
-      brandHoverBg: "#24292e"
+      href: "https://github.com/andree23-i",
+      actionLabel: language === 'en' ? "View Profile ↗" : "Vedi Profilo ↗"
     },
     { 
       id: "instagram",
       icon: <FiInstagram />, 
-      label: t.Instagram, 
+      label: "Instagram Social", 
       hint: "@andreaiacolare_", 
-      href: "https://www.instagram.com/andreaiacolare_/", 
-      brandColor: "#e1306c",
-      brandGlow: "rgba(225, 48, 108, 0.5)",
-      brandBg: "rgba(225, 48, 108, 0.12)",
-      brandHoverBg: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)"
+      href: "https://www.instagram.com/andreaiacolare_/",
+      actionLabel: language === 'en' ? "Follow ↗" : "Segui ↗"
     },
   ];
 
@@ -82,10 +75,12 @@ function Contact() {
     <section id="contact-section" className="section contact">
       <div className="section-header">
         <span className="section-badge">
-          <FiSend /> {t.Contact}
+          <FiSend /> {t.Contact || 'Contatti'}
         </span>
-        <h2>{t.ContactTitle}</h2>
-        <p className="section-subtitle">{t.ContactSubtitle}</p>
+        <h2>{t.ContactTitle || "Mettiamoci in Contatto"}</h2>
+        <p className="section-subtitle">
+          {t.ContactSubtitle || "Hai un'idea ambiziosa, un progetto da realizzare o vuoi integrare nuove tecnologie? Scrivimi direttamente tramite i miei canali ufficiali."}
+        </p>
       </div>
 
       <div className="contact-grid">
@@ -95,38 +90,48 @@ function Contact() {
             href={c.href} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className={`contact-card contact-${c.id}`} 
-            style={{ 
-              '--brand-color': c.brandColor,
-              '--brand-glow': c.brandGlow,
-              '--brand-bg': c.brandBg,
-              '--brand-hover-bg': c.brandHoverBg 
-            }}
+            className={`contact-card contact-${c.id}`}
+            title={`Contatta Andrea via ${c.label}`}
           >
-            <div className="contact-card-left">
-              <div className="contact-icon-box">
-                {c.icon}
-              </div>
-              <div className="contact-label-box">
-                <span className="contact-label-title">{c.label}</span>
-                <span className="contact-label-hint">{c.hint}</span>
-              </div>
+            <div className="contact-icon-box">
+              {c.icon}
             </div>
-            <div className="contact-card-arrow">
-              <FiArrowRight />
+
+            <div className="contact-info">
+              <span className="contact-label">{c.label}</span>
+              <span className="contact-hint">{c.hint}</span>
+            </div>
+
+            <div className="contact-action-arrow">
+              <FiArrowUpRight />
             </div>
           </a>
         ))}
       </div>
 
-      <div style={{ marginTop: '3rem', textAlign: 'center' }}>
-        <button 
-          onClick={handleCopyEmail} 
-          className="btn-primary"
-          title={copied ? t.EmailCopied : t.CopyEmail}
-        >
-          {copied ? <FiCheck size={18} /> : <FiMail size={18} />}
-          <span>{copied ? t.EmailCopied : `${t.CopyEmail}: ${email}`}</span>
+      {/* Instant Email Callout Card */}
+      <div className="glass-panel" style={{ marginTop: '3.5rem', padding: '2.5rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, transparent, var(--primary), transparent)' }} />
+        <h3 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
+          {language === 'en' ? "Ready to build something extraordinary?" : "Pronto a costruire qualcosa di straordinario?"}
+        </h3>
+        <p style={{ color: 'var(--text-muted)', maxWidth: '580px', margin: '0 auto 1.75rem', lineHeight: 1.6 }}>
+          {language === 'en' 
+            ? "Whether you need a cutting-edge Next.js application, high-converting showcase or bespoke AI automations, I am ready to collaborate."
+            : "Che tu abbia bisogno di un'applicazione Next.js all'avanguardia, un sito vetrina ad alto impatto o automazioni AI su misura, parliamone."}
+        </p>
+        <button onClick={handleCopyEmail} className="btn-primary" style={{ margin: '0 auto' }}>
+          {copied ? (
+            <>
+              <FiCheck size={18} style={{ color: '#ffffff' }} />
+              <span>{t.EmailCopied || "Email Copiata negli Appunti!"}</span>
+            </>
+          ) : (
+            <>
+              <FiMail size={18} />
+              <span>{email} — {language === 'en' ? "Click to Copy" : "Clicca per Copiare"}</span>
+            </>
+          )}
         </button>
       </div>
     </section>
@@ -134,4 +139,3 @@ function Contact() {
 }
 
 export default Contact;
-
