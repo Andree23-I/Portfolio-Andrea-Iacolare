@@ -3,22 +3,18 @@ import * as THREE from 'three';
 import './WebDevCenterpiece3D.css';
 import { 
   FiMonitor, 
+  FiSmartphone, 
   FiCode, 
-  FiTerminal, 
-  FiZap, 
   FiRefreshCw, 
   FiExternalLink
 } from 'react-icons/fi';
 
-export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
+export default function WebDevCenterpiece3D({ language = 'it' }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Interactive modes
-  const [activeTab, setActiveTab] = useState('preview'); // 'preview' | 'code' | 'terminal'
-  const [buildCount, setBuildCount] = useState(1);
-  const [isCompiling, setIsCompiling] = useState(false);
-  const [showFlash, setShowFlash] = useState(false);
+  // Focus modes: 'desktop' | 'mobile' | 'code' | 'overview'
+  const [activeFocus, setActiveFocus] = useState('overview');
   const [isDragging, setIsDragging] = useState(false);
 
   // References for Three.js state
@@ -26,28 +22,32 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
     renderer: null,
     scene: null,
     camera: null,
-    workstationGroup: null,
-    screenMesh: null,
-    screenCanvas: null,
-    screenCtx: null,
-    screenTexture: null,
-    particles: null,
+    sculptureGroup: null,
+    desktopGroup: null,
+    mobileGroup: null,
+    codeGroup: null,
+    halo1: null,
+    halo2: null,
     orbitals: [],
-    targetRotX: 0.15,
-    targetRotY: -0.25,
-    curRotX: 0.15,
-    curRotY: -0.25,
+    targetRotX: 0.1,
+    targetRotY: -0.2,
+    curRotX: 0.1,
+    curRotY: -0.2,
     userDragging: false,
     dragStartX: 0,
     dragStartY: 0,
     startRotX: 0,
     startRotY: 0,
-    burstProgress: 1,
-    particleVels: []
+    targetCamX: 0,
+    targetCamY: 0.1,
+    targetCamZ: 5.4,
+    desktopTexture: null,
+    mobileTexture: null,
+    codeTexture: null
   });
 
-  // Synthesized Web Audio Click / Shutter Sound
-  const playAudioFeedback = useCallback(() => {
+  // Synthesized Soft Haptic Audio Click (Zero Flash)
+  const playSoftClick = useCallback(() => {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
@@ -56,249 +56,243 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(750, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.08);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(620, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + 0.04);
       
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
       
       osc.connect(gain);
       gain.connect(ctx.destination);
       
       osc.start();
-      osc.stop(ctx.currentTime + 0.09);
-    } catch {
-      // Audio autoplay restrictions
-    }
+      osc.stop(ctx.currentTime + 0.05);
+    } catch {}
   }, []);
 
-  // Redraw the 3D screen texture on the laptop display
-  const updateScreenTexture = useCallback((tab, buildNum, compiling) => {
+  // Set focus perspective on one of the devices
+  const setFocus = useCallback((mode) => {
+    setActiveFocus(mode);
+    playSoftClick();
     const state = threeRef.current;
-    if (!state.screenCanvas || !state.screenCtx || !state.screenTexture) return;
 
-    const ctx = state.screenCtx;
-    const w = state.screenCanvas.width;
-    const h = state.screenCanvas.height;
-
-    // Background
-    ctx.fillStyle = '#08090e';
-    ctx.fillRect(0, 0, w, h);
-
-    // Subtle background grid
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < w; x += 40) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, h);
-      ctx.stroke();
+    if (mode === 'desktop') {
+      state.targetRotX = 0.05;
+      state.targetRotY = 0;
+      state.targetCamZ = 4.6;
+    } else if (mode === 'mobile') {
+      state.targetRotX = 0.08;
+      state.targetRotY = -0.55;
+      state.targetCamZ = 4.8;
+    } else if (mode === 'code') {
+      state.targetRotX = 0.08;
+      state.targetRotY = 0.55;
+      state.targetCamZ = 4.8;
+    } else {
+      // overview
+      state.targetRotX = 0.1;
+      state.targetRotY = -0.2;
+      state.targetCamZ = 5.4;
     }
-    for (let y = 0; y < h; y += 40) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
-      ctx.stroke();
-    }
+  }, [playSoftClick]);
 
-    // Top Chrome Window Bar
-    ctx.fillStyle = '#12141c';
-    ctx.fillRect(0, 0, w, 56);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-    ctx.beginPath();
-    ctx.moveTo(0, 56);
-    ctx.lineTo(w, 56);
-    ctx.stroke();
+  // Procedural Textures for the 3 Screens
+  const createTextures = useCallback(() => {
+    // 1. Desktop Screen Texture (southdv.studio)
+    const dCanvas = document.createElement('canvas');
+    dCanvas.width = 1024;
+    dCanvas.height = 640;
+    const dCtx = dCanvas.getContext('2d');
+    if (dCtx) {
+      dCtx.fillStyle = '#090a10';
+      dCtx.fillRect(0, 0, 1024, 640);
 
-    // macOS Traffic Light dots
-    const dots = [
-      { color: '#ff5f56', x: 28 },
-      { color: '#ffbd2e', x: 52 },
-      { color: '#27c93f', x: 76 }
-    ];
-    dots.forEach(d => {
-      ctx.beginPath();
-      ctx.arc(d.x, 28, 7, 0, Math.PI * 2);
-      ctx.fillStyle = d.color;
-      ctx.fill();
-    });
+      // Grid pattern
+      dCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      dCtx.lineWidth = 1;
+      for (let x = 0; x < 1024; x += 40) {
+        dCtx.beginPath();
+        dCtx.moveTo(x, 0);
+        dCtx.lineTo(x, 640);
+        dCtx.stroke();
+      }
 
-    // Address Bar
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
-    ctx.beginPath();
-    ctx.roundRect(110, 12, 540, 32, 6);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-    ctx.stroke();
+      // Title bar
+      dCtx.fillStyle = '#12141e';
+      dCtx.fillRect(0, 0, 1024, 64);
+      dCtx.fillStyle = '#ff5f56';
+      dCtx.beginPath(); dCtx.arc(32, 32, 8, 0, Math.PI * 2); dCtx.fill();
+      dCtx.fillStyle = '#ffbd2e';
+      dCtx.beginPath(); dCtx.arc(58, 32, 8, 0, Math.PI * 2); dCtx.fill();
+      dCtx.fillStyle = '#27c93f';
+      dCtx.beginPath(); dCtx.arc(84, 32, 8, 0, Math.PI * 2); dCtx.fill();
 
-    ctx.fillStyle = '#10b981';
-    ctx.font = '600 14px "Fira Code", monospace';
-    ctx.fillText('🔒 https://', 124, 33);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('andreaiacolare.dev', 232, 33);
-    ctx.fillStyle = '#616575';
-    ctx.fillText(`/${tab}`, 400, 33);
+      // Address bar
+      dCtx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+      dCtx.beginPath(); dCtx.roundRect(120, 14, 520, 36, 6); dCtx.fill();
+      dCtx.fillStyle = '#10b981';
+      dCtx.font = '600 16px "Fira Code", monospace';
+      dCtx.fillText('🔒 https://southdvstudio.vercel.app', 136, 38);
 
-    // Active Tab Pill in Chrome
-    ctx.fillStyle = '#ff4b26';
-    ctx.beginPath();
-    ctx.roundRect(670, 14, 115, 28, 4);
-    ctx.fill();
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '700 12px "Fira Code", monospace';
-    ctx.fillText(tab.toUpperCase(), 685, 33);
+      dCtx.fillStyle = '#ff4b26';
+      dCtx.font = '700 14px "Fira Code", monospace';
+      dCtx.fillText('NEXT.JS 15 PROD', 840, 38);
 
-    // Status Ping
-    ctx.fillStyle = '#10b981';
-    ctx.beginPath();
-    ctx.arc(765, 28, 4, 0, Math.PI * 2);
-    ctx.fill();
+      // Hero content
+      dCtx.fillStyle = '#ff4b26';
+      dCtx.font = '700 16px "Fira Code", monospace';
+      dCtx.fillText('[ ARCHITECTURE // CREATIVE DIGITAL STUDIO ]', 60, 130);
 
-    // Body content based on tab
-    if (tab === 'preview') {
-      // Mini Website Showcase (southdv.studio)
-      ctx.fillStyle = '#ff4b26';
-      ctx.font = '700 13px "Fira Code", monospace';
-      ctx.fillText('[ CASE // 01 • CREATIVE PRODUCTION STUDIO ]', 36, 100);
+      dCtx.fillStyle = '#ffffff';
+      dCtx.font = '800 52px "Syne", sans-serif';
+      dCtx.fillText('southdv.studio', 60, 195);
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '800 32px "Syne", sans-serif';
-      ctx.fillText('southdv.studio', 36, 146);
+      dCtx.fillStyle = '#9da2b4';
+      dCtx.font = '400 20px "Outfit", sans-serif';
+      dCtx.fillText('High-performance web architecture, tactile physics & modern e-commerce.', 60, 240);
 
-      ctx.fillStyle = '#9da2b4';
-      ctx.font = '400 15px "Outfit", sans-serif';
-      ctx.fillText('Modern web architecture, tactile physics and high conversion.', 36, 178);
-
-      // Metric Cards
-      const metrics = [
-        { label: 'LIGHTHOUSE', val: '100/100', color: '#10b981', x: 36 },
-        { label: 'EDGE TTFB', val: '< 80ms', color: '#ff4b26', x: 220 },
-        { label: 'ARCHITECTURE', val: 'NEXT.JS 15', color: '#00f0ff', x: 404 }
+      // Metric Badges
+      const badges = [
+        { label: 'LIGHTHOUSE', val: '100/100', col: '#10b981', x: 60 },
+        { label: 'EDGE TTFB', val: '< 80ms', col: '#ff4b26', x: 300 },
+        { label: 'RESPONSIVE', val: 'FLUID CSS', col: '#00f0ff', x: 540 }
       ];
-      metrics.forEach(m => {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
-        ctx.beginPath();
-        ctx.roundRect(m.x, 210, 168, 80, 8);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-        ctx.stroke();
+      badges.forEach(b => {
+        dCtx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+        dCtx.beginPath(); dCtx.roundRect(b.x, 280, 210, 100, 8); dCtx.fill();
+        dCtx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        dCtx.stroke();
 
-        ctx.fillStyle = m.color;
-        ctx.font = '800 22px "Fira Code", monospace';
-        ctx.fillText(m.val, m.x + 16, 250);
+        dCtx.fillStyle = b.col;
+        dCtx.font = '800 28px "Fira Code", monospace';
+        dCtx.fillText(b.val, b.x + 20, 332);
 
-        ctx.fillStyle = '#616575';
-        ctx.font = '600 11px "Fira Code", monospace';
-        ctx.fillText(m.label, m.x + 16, 274);
+        dCtx.fillStyle = '#616575';
+        dCtx.font = '600 13px "Fira Code", monospace';
+        dCtx.fillText(b.label, b.x + 20, 362);
       });
 
-      // Bottom Status Line
-      ctx.fillStyle = compiling ? '#f59e0b' : 'rgba(255, 255, 255, 0.08)';
-      ctx.beginPath();
-      ctx.roundRect(36, 320, 536, 44, 6);
-      ctx.fill();
+      // Bottom Wireframe Graphic
+      dCtx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
+      dCtx.lineWidth = 2;
+      dCtx.strokeRect(60, 420, 904, 160);
+      dCtx.fillStyle = 'rgba(0, 240, 255, 0.04)';
+      dCtx.fillRect(60, 420, 904, 160);
 
-      ctx.fillStyle = compiling ? '#000000' : '#ffffff';
-      ctx.font = '700 14px "Fira Code", monospace';
-      ctx.fillText(
-        compiling ? '⚡ RE-COMPILING EDGE BUNDLE...' : `⚡ BUILD #${buildNum} DEPLOYED // CLICK TO COMPILE`,
-        54, 347
-      );
-    } else if (tab === 'code') {
-      // Syntax Highlighted React Code
-      ctx.fillStyle = '#616575';
-      ctx.font = '500 13px "Fira Code", monospace';
-      ctx.fillText('// Andrea Iacolare - FullStackExperience.tsx', 36, 95);
+      dCtx.fillStyle = '#00f0ff';
+      dCtx.font = '600 15px "Fira Code", monospace';
+      dCtx.fillText('✦ LIVE PRODUCTION READY • FULL-STACK DEPLOYMENT ACTIVE', 80, 510);
+    }
+    const dTex = new THREE.CanvasTexture(dCanvas);
+    dTex.colorSpace = THREE.SRGBColorSpace;
+
+    // 2. Mobile Screen Texture
+    const mCanvas = document.createElement('canvas');
+    mCanvas.width = 480;
+    mCanvas.height = 960;
+    const mCtx = mCanvas.getContext('2d');
+    if (mCtx) {
+      mCtx.fillStyle = '#090a10';
+      mCtx.fillRect(0, 0, 480, 960);
+
+      // Top notch / status
+      mCtx.fillStyle = '#10b981';
+      mCtx.font = '700 14px "Fira Code", monospace';
+      mCtx.fillText('9:41 • 5G // 200 OK', 30, 45);
+
+      // URL
+      mCtx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      mCtx.beginPath(); mCtx.roundRect(24, 70, 432, 44, 8); mCtx.fill();
+      mCtx.fillStyle = '#ffffff';
+      mCtx.font = '600 15px "Fira Code", monospace';
+      mCtx.fillText('🔒 andreaiacolare.dev', 44, 98);
+
+      // Mobile Content Card
+      mCtx.fillStyle = '#ff4b26';
+      mCtx.font = '700 14px "Fira Code", monospace';
+      mCtx.fillText('[ MOBILE ARCHITECTURE ]', 30, 160);
+
+      mCtx.fillStyle = '#ffffff';
+      mCtx.font = '800 32px "Syne", sans-serif';
+      mCtx.fillText('Responsive Core', 30, 205);
+
+      mCtx.fillStyle = '#9da2b4';
+      mCtx.font = '400 16px "Outfit", sans-serif';
+      mCtx.fillText('Zero layout shift, instant tap response.', 30, 240);
+
+      // Mobile metric pills
+      const mPills = [
+        { label: 'REACT 18', col: '#00f0ff', y: 300 },
+        { label: 'TAILWIND v4', col: '#8b5cf6', y: 400 },
+        { label: 'EDGE CACHED', col: '#10b981', y: 500 },
+        { label: 'AI AUTOMATIONS', col: '#f59e0b', y: 600 }
+      ];
+      mPills.forEach(p => {
+        mCtx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+        mCtx.beginPath(); mCtx.roundRect(24, p.y, 432, 75, 10); mCtx.fill();
+        mCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        mCtx.stroke();
+
+        mCtx.fillStyle = p.col;
+        mCtx.font = '700 20px "Fira Code", monospace';
+        mCtx.fillText(`✦ ${p.label}`, 48, p.y + 45);
+      });
+    }
+    const mTex = new THREE.CanvasTexture(mCanvas);
+    mTex.colorSpace = THREE.SRGBColorSpace;
+
+    // 3. Code Screen Texture
+    const cCanvas = document.createElement('canvas');
+    cCanvas.width = 720;
+    cCanvas.height = 960;
+    const cCtx = cCanvas.getContext('2d');
+    if (cCtx) {
+      cCtx.fillStyle = '#090a10';
+      cCtx.fillRect(0, 0, 720, 960);
+
+      // Header
+      cCtx.fillStyle = '#141620';
+      cCtx.fillRect(0, 0, 720, 56);
+      cCtx.fillStyle = '#616575';
+      cCtx.font = '600 15px "Fira Code", monospace';
+      cCtx.fillText('// ArchitectureEngine.tsx', 24, 34);
 
       const codeLines = [
-        { text: "import { createModernWebEngine } from '@andrea/core';", color: '#00f0ff' },
-        { text: "import { Next15, React18, AgenticAI } from 'modern-stack';", color: '#8b5cf6' },
-        { text: "", color: '' },
-        { text: "export default async function Experience() {", color: '#ff4b26' },
-        { text: "  const architecture = await createModernWebEngine({", color: '#ffffff' },
-        { text: "    architect: 'Andrea Iacolare',", color: '#10b981' },
-        { text: "    performance: { lighthouse: 100, ttfb: '<80ms' },", color: '#f59e0b' },
-        { text: `    buildCount: ${buildNum}, status: 'PRODUCTION_READY'`, color: '#00f0ff' },
-        { text: "  });", color: '#ffffff' },
-        { text: "  return <ArchitectureRenderer stage={architecture} />;", color: '#ff4b26' },
-        { text: "}", color: '#ff4b26' }
+        { t: "import { createModernSystem } from '@andrea/core';", c: '#00f0ff' },
+        { t: "import { Next15, React18, AI } from 'web-stack';", c: '#8b5cf6' },
+        { t: "", c: '' },
+        { t: "export default async function Portfolio() {", c: '#ff4b26' },
+        { t: "  const experience = await createModernSystem({", c: '#ffffff' },
+        { t: "    architect: 'Andrea Iacolare',", c: '#10b981' },
+        { t: "    location: 'Salerno, IT // 40.68° N',", c: '#10b981' },
+        { t: "    performance: {", c: '#f59e0b' },
+        { t: "      lighthouse: 100,", c: '#f59e0b' },
+        { t: "      edgeTTFB: '<80ms',", c: '#f59e0b' },
+        { t: "      cls: 0.000", c: '#f59e0b' },
+        { t: "    },", c: '#f59e0b' },
+        { t: "    focus: ['Creative Engineering', 'Full-Stack'],", c: '#00f0ff' },
+        { t: "    status: 'PRODUCTION_VERIFIED'", c: '#10b981' },
+        { t: "  });", c: '#ffffff' },
+        { t: "", c: '' },
+        { t: "  return <SculptureStage stage={experience} />;", c: '#ff4b26' },
+        { t: "}", c: '#ff4b26' }
       ];
 
       codeLines.forEach((cl, idx) => {
-        if (!cl.text) return;
-        ctx.fillStyle = cl.color;
-        ctx.font = '500 13px "Fira Code", monospace';
-        ctx.fillText(cl.text, 36, 125 + idx * 24);
+        if (!cl.t) return;
+        cCtx.fillStyle = cl.c;
+        cCtx.font = '500 16px "Fira Code", monospace';
+        cCtx.fillText(cl.t, 32, 100 + idx * 36);
       });
-    } else if (tab === 'terminal') {
-      // Terminal Log Stream
-      ctx.fillStyle = '#64748b';
-      ctx.font = '500 13px "Fira Code", monospace';
-      ctx.fillText('[SYSTEM] Initializing Next.js 15.1 Production Server...', 36, 95);
-      ctx.fillStyle = '#00f0ff';
-      ctx.fillText('[NETWORK] Connected to Vercel Rome Edge CDN (12ms ping)', 36, 125);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText('[BUNDLER] Compiling 1,420 ES Modules in parallel...', 36, 155);
-      ctx.fillStyle = '#10b981';
-      ctx.fillText(`✓ Compiled successfully in 34ms (Build #${buildNum})`, 36, 185);
-      ctx.fillStyle = '#10b981';
-      ctx.fillText('✓ Core Web Vitals: LCP 0.6s | CLS 0.000 | FID 2ms', 36, 215);
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillText(`⚡ SHUTTER FLASH READY: ${compiling ? 'TRIGGERED [OK]' : 'STANDBY'}`, 36, 245);
-      
-      ctx.fillStyle = '#ff4b26';
-      ctx.fillText('dev@andrea:~$ deploy --prod --instant █', 36, 290);
     }
+    const cTex = new THREE.CanvasTexture(cCanvas);
+    cTex.colorSpace = THREE.SRGBColorSpace;
 
-    state.screenTexture.needsUpdate = true;
+    return { dTex, mTex, cTex };
   }, []);
 
-  // Compile Trigger & 3D Shutter Flash
-  const handleTriggerCompile = useCallback((e) => {
-    if (e) e.stopPropagation();
-    if (isCompiling) return;
-
-    setIsCompiling(true);
-    setShowFlash(true);
-    playAudioFeedback();
-    if (onTriggerFlash) onTriggerFlash();
-
-    // Trigger 3D particle burst
-    const state = threeRef.current;
-    state.burstProgress = 0;
-
-    setTimeout(() => {
-      setShowFlash(false);
-    }, 250);
-
-    setTimeout(() => {
-      setIsCompiling(false);
-      setBuildCount(prev => {
-        const next = prev + 1;
-        updateScreenTexture(activeTab, next, false);
-        return next;
-      });
-    }, 550);
-
-    updateScreenTexture(activeTab, buildCount, true);
-  }, [isCompiling, playAudioFeedback, onTriggerFlash, activeTab, buildCount, updateScreenTexture]);
-
-  // Tab switch handler
-  const handleTabSwitch = (tab) => {
-    setActiveTab(tab);
-    updateScreenTexture(tab, buildCount, isCompiling);
-    playAudioFeedback();
-  };
-
-  // Reset 3D Rotation
-  const handleResetRotation = () => {
-    const state = threeRef.current;
-    state.targetRotX = 0.15;
-    state.targetRotY = -0.25;
-  };
-
-  // Three.js 3D WebGL Workstation Initialization
+  // Three.js Scene Setup & Animation
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
@@ -323,193 +317,184 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.15;
     state.renderer = renderer;
 
-    // Scene & Camera
     const scene = new THREE.Scene();
     state.scene = scene;
 
     const camera = new THREE.PerspectiveCamera(40, 16 / 9, 0.1, 100);
-    camera.position.set(0, 0.2, 5.2);
+    camera.position.set(0, 0.1, 5.4);
     state.camera = camera;
 
     // Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
-    scene.add(ambientLight);
+    scene.add(new THREE.AmbientLight(0xffffff, 1.4));
 
-    const solarKeyLight = new THREE.DirectionalLight(0xff4b26, 3.2);
-    solarKeyLight.position.set(4, 5, 4);
-    scene.add(solarKeyLight);
+    const solarKey = new THREE.DirectionalLight(0xff4b26, 3.0);
+    solarKey.position.set(5, 6, 4);
+    scene.add(solarKey);
 
-    const cyanRimLight = new THREE.DirectionalLight(0x00f0ff, 2.4);
-    cyanRimLight.position.set(-4, -2, 3);
-    scene.add(cyanRimLight);
+    const cyanRim = new THREE.DirectionalLight(0x00f0ff, 2.4);
+    cyanRim.position.set(-5, -2, 3);
+    scene.add(cyanRim);
 
-    // Procedural Screen Texture Canvas
-    const screenCanvas = document.createElement('canvas');
-    screenCanvas.width = 800;
-    screenCanvas.height = 500;
-    const screenCtx = screenCanvas.getContext('2d');
-    const screenTexture = new THREE.CanvasTexture(screenCanvas);
-    screenTexture.colorSpace = THREE.SRGBColorSpace;
+    const topFill = new THREE.DirectionalLight(0xffffff, 1.6);
+    topFill.position.set(0, 7, 2);
+    scene.add(topFill);
 
-    state.screenCanvas = screenCanvas;
-    state.screenCtx = screenCtx;
-    state.screenTexture = screenTexture;
+    // Textures
+    const { dTex, mTex, cTex } = createTextures();
+    state.desktopTexture = dTex;
+    state.mobileTexture = mTex;
+    state.codeTexture = cTex;
 
-    // Build 3D Workstation / Laptop Geometry
-    const workstationGroup = new THREE.Group();
-    state.workstationGroup = workstationGroup;
+    // Master Sculpture Group
+    const sculptureGroup = new THREE.Group();
+    state.sculptureGroup = sculptureGroup;
 
-    // 1. Laptop Base / Keyboard Chassis
-    const baseGeo = new THREE.BoxGeometry(3.3, 0.14, 2.2);
-    const chassisMat = new THREE.MeshStandardMaterial({
-      color: 0x181a24,
-      metalness: 0.88,
-      roughness: 0.22
-    });
-    const baseMesh = new THREE.Mesh(baseGeo, chassisMat);
-    workstationGroup.add(baseMesh);
-
-    // Trackpad cutout
-    const trackpadGeo = new THREE.PlaneGeometry(0.9, 0.6);
-    const trackpadMat = new THREE.MeshStandardMaterial({
-      color: 0x12141c,
-      metalness: 0.9,
-      roughness: 0.3
-    });
-    const trackpadMesh = new THREE.Mesh(trackpadGeo, trackpadMat);
-    trackpadMesh.rotation.x = -Math.PI / 2;
-    trackpadMesh.position.set(0, 0.075, 0.55);
-    workstationGroup.add(trackpadMesh);
-
-    // Keyboard bed
-    const kbGeo = new THREE.PlaneGeometry(2.8, 1.1);
-    const kbMat = new THREE.MeshStandardMaterial({
-      color: 0x0c0d13,
-      metalness: 0.7,
-      roughness: 0.4
-    });
-    const kbMesh = new THREE.Mesh(kbGeo, kbMat);
-    kbMesh.rotation.x = -Math.PI / 2;
-    kbMesh.position.set(0, 0.075, -0.35);
-    workstationGroup.add(kbMesh);
-
-    // 2. Display Lid (Tilted at 105 degrees)
-    const lidGroup = new THREE.Group();
-    lidGroup.position.set(0, 0.07, -1.05);
-
-    const lidGeo = new THREE.BoxGeometry(3.3, 2.15, 0.08);
-    const lidMesh = new THREE.Mesh(lidGeo, chassisMat);
-    lidMesh.position.set(0, 1.075, 0);
-    lidGroup.add(lidMesh);
-
-    // Display Screen Mesh with Canvas Texture
-    const displayGeo = new THREE.PlaneGeometry(3.08, 1.95);
-    const displayMat = new THREE.MeshBasicMaterial({
-      map: screenTexture
-    });
-    const displayMesh = new THREE.Mesh(displayGeo, displayMat);
-    displayMesh.position.set(0, 1.075, 0.045);
-    lidGroup.add(displayMesh);
-    state.screenMesh = displayMesh;
-
-    // Glossy Glass Screen Overlay for specular reflections
-    const glassOverlayGeo = new THREE.PlaneGeometry(3.1, 1.98);
-    const glassOverlayMat = new THREE.MeshPhysicalMaterial({
+    // Glass material for frame borders
+    const glassFrameMat = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.12,
+      opacity: 0.18,
       roughness: 0.05,
       metalness: 0.1,
       clearcoat: 1,
       clearcoatRoughness: 0.04
     });
-    const glassMesh = new THREE.Mesh(glassOverlayGeo, glassOverlayMat);
-    glassMesh.position.set(0, 1.075, 0.048);
-    lidGroup.add(glassMesh);
 
-    // Tilt lid back
-    lidGroup.rotation.x = THREE.MathUtils.degToRad(-15);
-    workstationGroup.add(lidGroup);
+    const edgeLineMat = new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.35
+    });
 
-    // 3. Floating 3D Cyber Wireframe Grid beneath the Workstation
-    const gridHelper = new THREE.GridHelper(6, 16, 0xff4b26, 0x222638);
-    gridHelper.position.set(0, -0.65, 0);
-    workstationGroup.add(gridHelper);
+    // 1. Center Desktop Screen Viewport (16:10)
+    const desktopGroup = new THREE.Group();
+    state.desktopGroup = desktopGroup;
 
-    // 4. Floating 3D Orbital Tech Beacons (React, Next, AI, Tailwind)
-    const orbitalData = [
-      { tag: 'NEXT.JS 15', color: 0xffffff, pos: [-2.4, 1.4, 0.5] },
-      { tag: 'REACT 18', color: 0x00f0ff, pos: [2.4, 1.5, 0.4] },
-      { tag: 'AI AGENTS', color: 0xff4b26, pos: [2.2, -0.3, 1.2] },
-      { tag: 'TAILWIND v4', color: 0x8b5cf6, pos: [-2.2, -0.3, 1.1] }
+    const deskGeo = new THREE.BoxGeometry(3.6, 2.25, 0.07);
+    const deskFrame = new THREE.Mesh(deskGeo, glassFrameMat);
+    desktopGroup.add(deskFrame);
+    desktopGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(deskGeo), edgeLineMat));
+
+    const deskScreenMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.52, 2.18),
+      new THREE.MeshBasicMaterial({ map: dTex })
+    );
+    deskScreenMesh.position.z = 0.038;
+    desktopGroup.add(deskScreenMesh);
+    sculptureGroup.add(desktopGroup);
+
+    // 2. Mobile Viewport (Angled forward right)
+    const mobileGroup = new THREE.Group();
+    state.mobileGroup = mobileGroup;
+    mobileGroup.position.set(2.2, -0.2, 0.45);
+    mobileGroup.rotation.y = THREE.MathUtils.degToRad(-18);
+
+    const mobGeo = new THREE.BoxGeometry(1.15, 2.3, 0.06);
+    const mobFrame = new THREE.Mesh(mobGeo, glassFrameMat);
+    mobileGroup.add(mobFrame);
+    mobileGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(mobGeo), edgeLineMat));
+
+    const mobScreenMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.1, 2.24),
+      new THREE.MeshBasicMaterial({ map: mTex })
+    );
+    mobScreenMesh.position.z = 0.033;
+    mobileGroup.add(mobScreenMesh);
+    sculptureGroup.add(mobileGroup);
+
+    // 3. Code Viewport (Angled back left)
+    const codeGroup = new THREE.Group();
+    state.codeGroup = codeGroup;
+    codeGroup.position.set(-2.25, 0.25, -0.45);
+    codeGroup.rotation.y = THREE.MathUtils.degToRad(20);
+
+    const codeGeo = new THREE.BoxGeometry(1.8, 2.4, 0.06);
+    const codeFrame = new THREE.Mesh(codeGeo, glassFrameMat);
+    codeGroup.add(codeFrame);
+    codeGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(codeGeo), edgeLineMat));
+
+    const codeScreenMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.74, 2.34),
+      new THREE.MeshBasicMaterial({ map: cTex })
+    );
+    codeScreenMesh.position.z = 0.033;
+    codeGroup.add(codeScreenMesh);
+    sculptureGroup.add(codeGroup);
+
+    // 4. Double Gyroscopic Orbital Rings
+    const halo1 = new THREE.Mesh(
+      new THREE.TorusGeometry(3.4, 0.018, 16, 120),
+      new THREE.MeshStandardMaterial({
+        color: 0xff4b26,
+        metalness: 0.9,
+        roughness: 0.15,
+        emissive: 0xff4b26,
+        emissiveIntensity: 0.25
+      })
+    );
+    halo1.rotation.x = Math.PI / 2.3;
+    sculptureGroup.add(halo1);
+    state.halo1 = halo1;
+
+    const halo2 = new THREE.Mesh(
+      new THREE.TorusGeometry(3.6, 0.014, 16, 120),
+      new THREE.MeshStandardMaterial({
+        color: 0x00f0ff,
+        metalness: 0.9,
+        roughness: 0.15,
+        emissive: 0x00f0ff,
+        emissiveIntensity: 0.25
+      })
+    );
+    halo2.rotation.x = -Math.PI / 2.6;
+    halo2.rotation.y = Math.PI / 8;
+    sculptureGroup.add(halo2);
+    state.halo2 = halo2;
+
+    // 5. Floating 3D Tech Tokens
+    const techTokens = [
+      { text: 'NEXT.JS', color: 0xffffff, pos: [-2.6, 1.6, 0.3] },
+      { text: 'REACT 18', color: 0x00f0ff, pos: [2.5, 1.6, 0.2] },
+      { text: 'AI AGENTS', color: 0xff4b26, pos: [2.3, -1.5, 0.6] },
+      { text: 'TAILWIND', color: 0x8b5cf6, pos: [-2.4, -1.4, 0.5] }
     ];
 
-    const orbitalMeshes = orbitalData.map(orb => {
-      const orbGroup = new THREE.Group();
-      orbGroup.position.set(...orb.pos);
+    const tokenMeshes = techTokens.map(tok => {
+      const g = new THREE.Group();
+      g.position.set(...tok.pos);
 
-      // Core cube
-      const cubeGeo = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-      const cubeMat = new THREE.MeshStandardMaterial({
-        color: orb.color,
-        emissive: orb.color,
-        emissiveIntensity: 0.4,
-        roughness: 0.2
-      });
-      orbGroup.add(new THREE.Mesh(cubeGeo, cubeMat));
+      const box = new THREE.Mesh(
+        new THREE.BoxGeometry(0.25, 0.25, 0.25),
+        new THREE.MeshStandardMaterial({
+          color: tok.color,
+          emissive: tok.color,
+          emissiveIntensity: 0.3,
+          roughness: 0.2,
+          metalness: 0.8
+        })
+      );
+      g.add(box);
 
-      // Glow wireframe ring
-      const ringGeo = new THREE.RingGeometry(0.18, 0.22, 16);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: orb.color,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.6
-      });
-      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-      orbGroup.add(ringMesh);
+      const wire = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0, -tok.pos[1], -tok.pos[2])
+        ]),
+        new THREE.LineBasicMaterial({ color: tok.color, transparent: true, opacity: 0.25 })
+      );
+      g.add(wire);
 
-      workstationGroup.add(orbGroup);
-      return { group: orbGroup, origPos: orb.pos, speed: Math.random() * 0.5 + 0.8 };
+      sculptureGroup.add(g);
+      return { group: g, origPos: tok.pos, speed: Math.random() * 0.4 + 0.8 };
     });
-    state.orbitals = orbitalMeshes;
+    state.orbitals = tokenMeshes;
 
-    // 5. Shutter Compile Burst Particles (150 particles)
-    const pCount = 150;
-    const pGeo = new THREE.BufferGeometry();
-    const pPositions = new Float32Array(pCount * 3);
-    const pVels = [];
-    for (let i = 0; i < pCount; i++) {
-      pPositions[i * 3] = 0;
-      pPositions[i * 3 + 1] = 1.0;
-      pPositions[i * 3 + 2] = 0;
-      pVels.push(new THREE.Vector3(
-        (Math.random() - 0.5) * 4,
-        (Math.random() - 0.5) * 4 + 0.5,
-        Math.random() * 5 + 1
-      ));
-    }
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-    const pMat = new THREE.PointsMaterial({
-      color: 0x00f0ff,
-      size: 0.08,
-      transparent: true,
-      opacity: 0
-    });
-    const pPoints = new THREE.Points(pGeo, pMat);
-    workstationGroup.add(pPoints);
-    state.particles = pPoints;
-    state.particleVels = pVels;
+    scene.add(sculptureGroup);
 
-    scene.add(workstationGroup);
-
-    // Initial Screen Draw
-    updateScreenTexture('preview', 1, false);
-
-    // Mouse Tracking & Drag Orbit Handlers
+    // Mouse & Touch Drag Handlers (Smooth Orbit)
     const onMouseDown = (e) => {
       state.userDragging = true;
       setIsDragging(true);
@@ -523,15 +508,15 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
       if (state.userDragging) {
         const deltaX = e.clientX - state.dragStartX;
         const deltaY = e.clientY - state.dragStartY;
-        state.targetRotY = state.startRotY + deltaX * 0.008;
-        state.targetRotX = Math.max(-0.4, Math.min(0.6, state.startRotX + deltaY * 0.008));
+        state.targetRotY = state.startRotY + deltaX * 0.007;
+        state.targetRotX = Math.max(-0.4, Math.min(0.5, state.startRotX + deltaY * 0.007));
       } else {
-        // Natural gentle mouse tracking across screen
+        // Natural subtle mouse parallax across hero
         const rect = container.getBoundingClientRect();
         const normX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         const normY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-        state.targetRotY = -0.25 + normX * 0.28;
-        state.targetRotX = 0.15 - normY * 0.18;
+        state.targetRotY = -0.2 + normX * 0.22;
+        state.targetRotX = 0.1 - normY * 0.14;
       }
     };
 
@@ -540,7 +525,7 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
       setIsDragging(false);
     };
 
-    // Touch support for mobile devices
+    // Mobile Touch
     const onTouchStart = (e) => {
       if (e.touches.length === 1) {
         state.userDragging = true;
@@ -556,8 +541,8 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
       if (state.userDragging && e.touches.length === 1) {
         const deltaX = e.touches[0].clientX - state.dragStartX;
         const deltaY = e.touches[0].clientY - state.dragStartY;
-        state.targetRotY = state.startRotY + deltaX * 0.008;
-        state.targetRotX = Math.max(-0.4, Math.min(0.6, state.startRotX + deltaY * 0.008));
+        state.targetRotY = state.startRotY + deltaX * 0.007;
+        state.targetRotX = Math.max(-0.4, Math.min(0.5, state.startRotX + deltaY * 0.007));
       }
     };
 
@@ -576,11 +561,11 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
     // Responsive Canvas Resizing
     const handleResize = () => {
       const w = container.clientWidth || window.innerWidth;
-      const h = container.clientHeight || 520;
+      const h = container.clientHeight || 560;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.fov = w < 768 ? 52 : 38;
-      camera.position.z = w < 768 ? 6.2 : 5.2;
+      camera.position.z = w < 768 ? 6.2 : 5.4;
       camera.updateProjectionMatrix();
     };
 
@@ -588,50 +573,35 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
     resizeObserver.observe(container);
     handleResize();
 
-    // 60 FPS Render Loop with Physics
+    // 60 FPS Render Loop
     let animId = 0;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
-      const dt = Math.min(0.05, clock.getDelta());
       const time = clock.getElapsedTime();
 
-      // Smooth interpolation for 3D rotation
+      // Smooth interpolation
       state.curRotX += (state.targetRotX - state.curRotX) * 0.08;
       state.curRotY += (state.targetRotY - state.curRotY) * 0.08;
 
-      // Gentle continuous breathing sway
-      const idleSway = Math.sin(time * 0.8) * 0.02;
-      workstationGroup.rotation.x = state.curRotX + idleSway;
-      workstationGroup.rotation.y = state.curRotY;
-      workstationGroup.position.y = Math.sin(time * 1.2) * 0.06;
+      // Gentle continuous organic breathing sway
+      const idleSway = Math.sin(time * 0.7) * 0.015;
+      sculptureGroup.rotation.x = state.curRotX + idleSway;
+      sculptureGroup.rotation.y = state.curRotY;
+      sculptureGroup.position.y = Math.sin(time * 1.1) * 0.05;
 
-      // Orbitals floating animation
-      state.orbitals.forEach((orb, i) => {
-        orb.group.position.y = orb.origPos[1] + Math.sin(time * orb.speed + i) * 0.08;
-        orb.group.rotation.y += 0.02;
-        orb.group.rotation.x += 0.01;
+      // Rotate gyroscopic rings
+      if (state.halo1) state.halo1.rotation.z += 0.003;
+      if (state.halo2) state.halo2.rotation.z -= 0.002;
+
+      // Floating tech tokens
+      state.orbitals.forEach((tok, i) => {
+        tok.group.position.y = tok.origPos[1] + Math.sin(time * tok.speed + i) * 0.06;
+        tok.group.rotation.y += 0.015;
       });
 
-      // Particle explosion animation during shutter compile
-      if (state.burstProgress < 1) {
-        state.burstProgress += dt * 1.8;
-        const prog = state.burstProgress;
-        const posAttr = state.particles.geometry.attributes.position;
-        const posArr = posAttr.array;
-
-        state.particles.material.opacity = Math.max(0, 1 - prog * 1.2);
-
-        for (let i = 0; i < pCount; i++) {
-          const v = state.particleVels[i];
-          posArr[i * 3] = v.x * prog * 1.2;
-          posArr[i * 3 + 1] = 1.0 + v.y * prog * 1.2;
-          posArr[i * 3 + 2] = v.z * prog * 1.4;
-        }
-        posAttr.needsUpdate = true;
-      } else {
-        state.particles.material.opacity = 0;
-      }
+      // Smooth camera zoom
+      camera.position.z += (state.targetCamZ - camera.position.z) * 0.06;
 
       renderer.render(scene, camera);
       animId = requestAnimationFrame(animate);
@@ -649,71 +619,71 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
       canvas.removeEventListener('touchmove', onTouchMove);
       canvas.removeEventListener('touchend', onTouchEnd);
 
-      // Dispose Three.js objects
-      baseGeo.dispose();
-      chassisMat.dispose();
-      trackpadGeo.dispose();
-      trackpadMat.dispose();
-      kbGeo.dispose();
-      kbMat.dispose();
-      lidGeo.dispose();
-      displayGeo.dispose();
-      displayMat.dispose();
-      glassOverlayGeo.dispose();
-      glassOverlayMat.dispose();
-      gridHelper.dispose();
-      pGeo.dispose();
-      pMat.dispose();
-      screenTexture.dispose();
+      // Clean up Three.js allocations
+      deskGeo.dispose();
+      mobGeo.dispose();
+      codeGeo.dispose();
+      glassFrameMat.dispose();
+      edgeLineMat.dispose();
+      dTex.dispose();
+      mTex.dispose();
+      cTex.dispose();
       renderer.dispose();
     };
-  }, [updateScreenTexture]);
+  }, [createTextures]);
 
   return (
-    <div className="webdev-3d-workstation-container" ref={containerRef}>
-      {/* Visual Flash Burst Overlay on Shutter Click */}
-      {showFlash && <div className="workstation-flash-overlay" aria-hidden="true" />}
-
-      {/* 3D WebGL Canvas */}
+    <div className="webdev-3d-sculpture-wrapper" ref={containerRef}>
+      {/* Three.js 3D WebGL Canvas */}
       <canvas 
         ref={canvasRef} 
-        className={`webdev-3d-canvas ${isDragging ? 'is-dragging' : ''}`}
-        onClick={handleTriggerCompile}
-        title="Clicca o trascina per ruotare la workstation 3D a 360°"
+        className={`webdev-3d-sculpture-canvas ${isDragging ? 'is-dragging' : ''}`}
+        title="Trascina per ruotare la scultura 3D a 360°"
       />
 
-      {/* Floating 3D Control Strip */}
-      <div className="workstation-ui-floating-bar font-mono">
-        <div className="ui-tabs-group">
+      {/* Floating 3D Navigation Controls */}
+      <div className="sculpture-ui-command-bar font-mono">
+        <div className="sculpture-view-group">
           <button 
-            className={`ui-mode-btn ${activeTab === 'preview' ? 'active' : ''}`}
-            onClick={() => handleTabSwitch('preview')}
+            className={`sculpture-view-btn ${activeFocus === 'overview' ? 'active' : ''}`}
+            onClick={() => setFocus('overview')}
+            title="Vista Panoramica 3D"
+          >
+            <span>[ 3D OVERVIEW ]</span>
+          </button>
+
+          <button 
+            className={`sculpture-view-btn ${activeFocus === 'desktop' ? 'active' : ''}`}
+            onClick={() => setFocus('desktop')}
+            title="Focus sul Viewport Desktop"
           >
             <FiMonitor />
-            <span>01 // LIVE SHOWCASE</span>
+            <span>DESKTOP 16:9</span>
           </button>
 
           <button 
-            className={`ui-mode-btn ${activeTab === 'code' ? 'active' : ''}`}
-            onClick={() => handleTabSwitch('code')}
+            className={`sculpture-view-btn ${activeFocus === 'mobile' ? 'active' : ''}`}
+            onClick={() => setFocus('mobile')}
+            title="Focus sul Viewport Mobile"
+          >
+            <FiSmartphone />
+            <span>MOBILE CORE</span>
+          </button>
+
+          <button 
+            className={`sculpture-view-btn ${activeFocus === 'code' ? 'active' : ''}`}
+            onClick={() => setFocus('code')}
+            title="Focus sull'Architettura del Codice"
           >
             <FiCode />
-            <span>02 // REACT 18 CODE</span>
-          </button>
-
-          <button 
-            className={`ui-mode-btn ${activeTab === 'terminal' ? 'active' : ''}`}
-            onClick={() => handleTabSwitch('terminal')}
-          >
-            <FiTerminal />
-            <span>03 // BUILD LOG</span>
+            <span>REACT 18 CODE</span>
           </button>
         </div>
 
-        <div className="ui-action-group">
+        <div className="sculpture-action-group">
           <button 
-            className="ui-reset-btn"
-            onClick={handleResetRotation}
+            className="sculpture-reset-btn"
+            onClick={() => setFocus('overview')}
             title="Ripristina Angolatura 3D Iniziale"
           >
             <FiRefreshCw />
@@ -724,28 +694,23 @@ export default function WebDevCenterpiece3D({ t, onTriggerFlash }) {
             href="https://southdvstudio.vercel.app" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="ui-launch-btn"
+            className="sculpture-live-link"
             title="Visita southdv.studio"
           >
             <span>southdv.studio</span>
             <FiExternalLink />
           </a>
-
-          <button 
-            className={`ui-compile-trigger-btn ${isCompiling ? 'compiling' : ''}`}
-            onClick={handleTriggerCompile}
-            title="Attiva lo shutter di compilazione e il flash"
-          >
-            <FiZap />
-            <span>{isCompiling ? 'COMPILING...' : `COMPILE & FLASH #${buildCount}`}</span>
-          </button>
         </div>
       </div>
 
-      {/* Hint Badge for Interactivity */}
-      <div className="workstation-3d-hint font-mono">
+      {/* Subtle Hint Badge */}
+      <div className="sculpture-hint-badge font-mono">
         <span className="hint-bracket">[</span>
-        <span className="hint-text">✦ DRAG TO ROTATE 360° • CLICK TO COMPILE & SHUTTER FLASH</span>
+        <span className="hint-text">
+          {language === 'en'
+            ? '✦ DRAG TO ROTATE 360° • INTERACTIVE 3D RESPONSIVE VIEWPORT SCULPTURE'
+            : '✦ TRASCINA PER RUOTARE A 360° • SCULTURA 3D RESPONSIVE VIEWPORT'}
+        </span>
         <span className="hint-bracket">]</span>
       </div>
     </div>

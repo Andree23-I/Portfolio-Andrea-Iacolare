@@ -31,7 +31,6 @@ export default function Intro({ onOpenPortal }) {
   
   const [copied, setCopied] = useState(false);
   const [timeStr, setTimeStr] = useState('');
-  const [flashTriggered, setFlashTriggered] = useState(false);
   
   // Projects state
   const activeProjects = t.projectsData || projectsData;
@@ -66,11 +65,6 @@ export default function Intro({ onOpenPortal }) {
     navigator.clipboard.writeText(email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleTriggerFlash = () => {
-    setFlashTriggered(true);
-    setTimeout(() => setFlashTriggered(false), 400);
   };
 
   const scrollToSection = (id) => {
@@ -139,7 +133,7 @@ export default function Intro({ onOpenPortal }) {
   ];
 
   return (
-    <div className={`emma-editorial-experience ${flashTriggered ? 'flash-active' : ''}`}>
+    <div className="emma-editorial-experience">
       {/* ==========================================================================
           01. VIEWFINDER HERO HUD & 3D WEB CENTERPIECE
           ========================================================================== */}
@@ -200,7 +194,7 @@ export default function Intro({ onOpenPortal }) {
 
         {/* 3D Web Centerpiece (Direct replacement for the 3D film camera) */}
         <div className="hero-3d-centerpiece-container">
-          <WebDevCenterpiece3D t={t} onTriggerFlash={handleTriggerFlash} />
+          <WebDevCenterpiece3D t={t} />
         </div>
 
         {/* Hero Bottom Navigation & Shutter Trigger Strip */}
