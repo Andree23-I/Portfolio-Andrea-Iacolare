@@ -1155,9 +1155,26 @@ body.light-theme .wordmark-ghost {
 /* 3D Centerpiece Container */
 .hero-3d-centerpiece-container {
   width: 100%;
-  margin: 1.5rem 0 2.5rem;
+  min-height: 580px;
+  margin: 1.5rem 0 3rem;
   display: flex;
   justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+
+@media (max-width: 1024px) {
+  .hero-3d-centerpiece-container {
+    min-height: 520px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-3d-centerpiece-container {
+    min-height: 460px;
+    margin: 1rem 0 2rem;
+  }
 }
 
 /* Hero Action Strip */
