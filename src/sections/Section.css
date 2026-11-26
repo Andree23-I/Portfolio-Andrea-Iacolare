@@ -978,3 +978,678 @@ body.light-theme .chip {
     justify-content: center;
   }
 }
+
+
+/* ==========================================================================
+   EMMA PARKER EDITORIAL SUITE - LUXURY CINEMATIC ARCHITECTURE
+   Adapted for Web Engineering & Interactive 3D Workstation
+   ========================================================================== */
+
+.emma-editorial-experience {
+  position: relative;
+  width: 100%;
+}
+
+/* ==========================================================================
+   01. VIEWFINDER HERO STAGE
+   ========================================================================== */
+.viewfinder-hero-stage {
+  position: relative;
+  min-height: 94vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem 5rem;
+  margin-bottom: 6rem;
+  border-bottom: 1px solid var(--border-color);
+  overflow: visible;
+}
+
+/* Viewfinder Corner HUD Brackets */
+.viewfinder-bracket {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--text-dim);
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+.bracket-tl { top: 1.5rem; left: 1.5rem; }
+.bracket-tr { top: 1.5rem; right: 1.5rem; }
+.bracket-bl { bottom: 1.5rem; left: 1.5rem; }
+.bracket-br { bottom: 1.5rem; right: 1.5rem; }
+
+/* Viewfinder Top Telemetry HUD */
+.viewfinder-telemetry-hud {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem 2rem;
+  padding: 0.65rem 1.75rem;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  margin-bottom: 2.5rem;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+.hud-metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.hud-label {
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+.hud-val {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.rec-badge {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.rec-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  animation: pulseDot 1.5s infinite ease-in-out;
+}
+
+.status-operational {
+  color: #10b981;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+/* ==========================================================================
+   HERO WORDMARK (Emma Parker 'btl-wordmark' Style)
+   ========================================================================== */
+.hero-wordmark-container {
+  text-align: center;
+  margin-bottom: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.role-super-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+}
+
+.role-super-tag .bracket {
+  color: var(--text-dim);
+}
+
+.editorial-wordmark {
+  position: relative;
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(3.2rem, 8.5vw, 7.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.wordmark-ghost {
+  position: absolute;
+  inset: 0;
+  color: rgba(255, 255, 255, 0.06);
+  transform: translateY(-4px);
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+body.light-theme .wordmark-ghost {
+  color: rgba(0, 0, 0, 0.05);
+}
+
+.wordmark-solid {
+  position: relative;
+  color: var(--text-main);
+  text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.hero-editorial-sub {
+  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  color: var(--text-muted);
+  max-width: 640px;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+/* 3D Centerpiece Container */
+.hero-3d-centerpiece-container {
+  width: 100%;
+  margin: 1.5rem 0 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hero Action Strip */
+.hero-action-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+/* Luxury Editorial Buttons */
+.btn-editorial-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.85rem;
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 8px 30px -5px var(--primary-glow);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.btn-editorial-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px -5px var(--primary-glow);
+}
+
+.btn-editorial-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.65rem;
+  background: var(--surface-glass);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-editorial-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+}
+
+body.light-theme .btn-editorial-secondary:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Social Pill Group */
+.hero-social-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.social-pill-btn:hover {
+  color: var(--text-main);
+  border-color: var(--primary);
+  background: rgba(255, 75, 38, 0.08);
+}
+
+/* ==========================================================================
+   02. EDITORIAL MANIFESTO / PHILOSOPHY
+   ========================================================================== */
+.editorial-manifesto-stage {
+  margin: 5rem 0 8rem;
+}
+
+.manifesto-card {
+  padding: 3.5rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.manifesto-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 2.5rem;
+}
+
+.manifesto-tag {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.manifesto-quote {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: clamp(1.8rem, 3.8vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: var(--text-main);
+  margin: 0 0 2.5rem;
+}
+
+.manifesto-footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.manifesto-author {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.manifesto-specs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.spec-pill {
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-glass);
+  border: 1px solid var(--border-color);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   04. THE JOURNEY SO FAR (Chronology Timeline)
+   ========================================================================== */
+.editorial-journey-stage {
+  margin: 6rem 0 8rem;
+}
+
+.journey-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.journey-milestone-card {
+  position: relative;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--surface-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.journey-milestone-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+}
+
+.milestone-top-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.milestone-year {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.milestone-month {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.milestone-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--text-main);
+}
+
+.milestone-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-bottom: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.milestone-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.milestone-corner-mark {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  opacity: 0.4;
+}
+
+/* ==========================================================================
+   06. TELEMETRY & ACHIEVEMENTS (Emma Parker 'btl-achievements' Style)
+   ========================================================================== */
+.editorial-achievements-stage {
+  margin: 6rem 0 8rem;
+}
+
+.achievements-quad-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .achievements-quad-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .achievements-quad-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.achievement-cell {
+  padding: 2.25rem 1.75rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--surface-card);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.achievement-cell:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+}
+
+.achievement-cell.highlight {
+  border-color: var(--primary);
+  background: rgba(255, 75, 38, 0.05);
+}
+
+.achievement-num {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 0.85rem;
+}
+
+.achievement-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.achievement-detail {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ==========================================================================
+   07. IN THEIR WORDS (Testimonials)
+   ========================================================================== */
+.editorial-testimonials-stage {
+  margin: 6rem 0 8rem;
+}
+
+.testimonials-editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 960px) {
+  .testimonials-editorial-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.testimonial-card {
+  padding: 2.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--surface-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.testimonial-rating {
+  color: #f59e0b;
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.1em;
+}
+
+.testimonial-body {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-main);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.author-name {
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.author-role {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   08. CONTACT & VIEWFINDER FOOTER
+   ========================================================================== */
+.editorial-contact-stage {
+  margin: 6rem 0 3rem;
+}
+
+.contact-editorial-card {
+  padding: 4rem 3rem 2.5rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  background: var(--surface-color);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-header-strip {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.contact-editorial-title {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.contact-editorial-desc {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 620px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.65;
+}
+
+.contact-cta-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.contact-social-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+}
+
+.social-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-glass);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.social-box:hover {
+  color: var(--text-main);
+  border-color: var(--primary);
+  background: rgba(255, 75, 38, 0.08);
+}
+
+/* Viewfinder Camera Footer */
+.viewfinder-footer-hud {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .viewfinder-footer-hud {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.hud-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hud-sub {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+}
+
+.hud-val {
+  color: var(--text-main);
+  font-weight: 600;
+}

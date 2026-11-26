@@ -1,0 +1,849 @@
+/* ==========================================================================
+   WEB DEV CENTERPIECE 3D - HARDWARE-ACCELERATED CYBER WORKSTATION
+   Interactive 3D Replacement for the Camera in Emma Parker Template
+   ========================================================================== */
+
+.webdev-3d-stage {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  padding: 1.5rem 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Flash Shutter Effect Overlay (Counterpart to the camera flash) */
+.shutter-flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95), rgba(0, 240, 255, 0.4) 60%, transparent 80%);
+  z-index: 999999;
+  pointer-events: none;
+  animation: flash-burst 0.28s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes flash-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+/* The 3D Workstation Card */
+.webdev-3d-workstation {
+  position: relative;
+  width: 100%;
+  background: rgba(12, 13, 18, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: 
+    0 30px 80px -20px rgba(0, 0, 0, 0.9),
+    0 0 50px -15px rgba(255, 75, 38, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease, max-width 0.4s ease;
+  overflow: visible;
+  user-select: none;
+}
+
+.webdev-3d-workstation:hover {
+  border-color: rgba(255, 75, 38, 0.45);
+  box-shadow: 
+    0 40px 100px -20px rgba(0, 0, 0, 0.95),
+    0 0 60px -10px rgba(255, 75, 38, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.25);
+}
+
+/* Light Theme overrides */
+body.light-theme .webdev-3d-workstation {
+  background: rgba(255, 255, 255, 0.94);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0 25px 60px -15px rgba(10, 11, 16, 0.12),
+    0 0 40px -10px rgba(224, 53, 18, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+/* Maximized Viewport Mode */
+.webdev-3d-stage.is-maximized .webdev-3d-workstation {
+  max-width: 1140px;
+}
+
+/* Wireframe Blueprint Mode */
+.webdev-3d-stage.is-wireframe .webdev-3d-workstation {
+  background: rgba(3, 10, 20, 0.95);
+  border: 1px dashed rgba(0, 240, 255, 0.8);
+  box-shadow: 0 0 50px rgba(0, 240, 255, 0.35);
+}
+
+.webdev-3d-stage.is-wireframe .webdev-3d-workstation * {
+  border-color: rgba(0, 240, 255, 0.3) !important;
+  color: #00f0ff !important;
+}
+
+/* ==========================================================================
+   FLOATING 3D ORBITALS
+   ========================================================================== */
+
+.tech-orbital {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(18, 19, 28, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: #ffffff;
+  z-index: 40;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: float-gentle 4s ease-in-out infinite alternate;
+}
+
+body.light-theme .tech-orbital {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #0a0b10;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.orbital-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary, #ff4b26);
+  box-shadow: 0 0 10px var(--primary, #ff4b26);
+}
+
+.orbital-top-left {
+  top: -1.2rem;
+  left: 2rem;
+  transform: translateZ(60px);
+}
+
+.orbital-top-right {
+  top: -1.2rem;
+  right: 2rem;
+  transform: translateZ(80px);
+  animation-delay: -1.5s;
+}
+
+.orbital-bottom-left {
+  bottom: -1rem;
+  left: 3rem;
+  transform: translateZ(70px);
+  animation-delay: -2s;
+}
+
+.orbital-bottom-right {
+  bottom: -1rem;
+  right: 3rem;
+  transform: translateZ(90px);
+  animation-delay: -0.8s;
+}
+
+@keyframes float-gentle {
+  0% {
+    transform: translateZ(60px) translateY(0);
+  }
+  100% {
+    transform: translateZ(60px) translateY(-8px);
+  }
+}
+
+/* ==========================================================================
+   BROWSER CHROME HEADER
+   ========================================================================== */
+
+.workstation-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 1rem;
+  border-radius: var(--radius-lg, 20px) var(--radius-lg, 20px) 0 0;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+body.light-theme .workstation-chrome {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Traffic Lights */
+.chrome-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.traffic-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  outline: none;
+}
+
+.traffic-light:hover {
+  transform: scale(1.15);
+}
+
+.light-red {
+  background: #ff5f56;
+  box-shadow: 0 0 6px rgba(255, 95, 86, 0.5);
+}
+
+.light-yellow {
+  background: #ffbd2e;
+  box-shadow: 0 0 6px rgba(255, 189, 46, 0.5);
+}
+
+.light-green {
+  background: #27c93f;
+  box-shadow: 0 0 6px rgba(39, 201, 63, 0.5);
+}
+
+/* Mode Switch Tabs */
+.chrome-mode-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.25rem 0.35rem;
+  border-radius: var(--radius-pill, 9999px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.light-theme .chrome-mode-tabs {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.mode-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill, 9999px);
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #9da2b4);
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-tab:hover {
+  color: #ffffff;
+}
+
+body.light-theme .mode-tab:hover {
+  color: #000000;
+}
+
+.mode-tab.active {
+  background: var(--primary, #ff4b26);
+  color: #ffffff;
+  box-shadow: 0 0 15px var(--primary-glow, rgba(255, 75, 38, 0.4));
+}
+
+.tab-icon {
+  font-size: 0.8rem;
+}
+
+/* Device Breakpoints */
+.chrome-device-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.device-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  color: var(--text-muted, #9da2b4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+body.light-theme .device-btn {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.device-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.device-btn.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.light-theme .device-btn.active {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000000;
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+/* ==========================================================================
+   ADDRESS & TELEMETRY BAR
+   ========================================================================== */
+
+.workstation-url-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.25rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.76rem;
+}
+
+body.light-theme .workstation-url-bar {
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom-color: rgba(0, 0, 0, 0.05);
+}
+
+.url-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted, #9da2b4);
+}
+
+.url-lock-icon {
+  color: #10b981;
+  font-size: 0.8rem;
+}
+
+.url-protocol {
+  color: #10b981;
+  opacity: 0.9;
+}
+
+.url-domain {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+body.light-theme .url-domain {
+  color: #0a0b10;
+}
+
+.url-path {
+  color: var(--text-dim, #616575);
+}
+
+.url-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs, 4px);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted, #9da2b4);
+  font-size: 0.68rem;
+}
+
+.telemetry-badge.status-online {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  font-weight: 600;
+}
+
+.status-indicator-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.url-reload-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #9da2b4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.url-reload-btn:hover {
+  color: #ffffff;
+}
+
+.url-reload-btn.spinning {
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   VIEWPORT DISPLAY
+   ========================================================================== */
+
+.workstation-viewport {
+  position: relative;
+  min-height: 380px;
+  max-height: 440px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(7, 8, 12, 0.95);
+  transition: all 0.3s ease;
+}
+
+body.light-theme .workstation-viewport {
+  background: #fafbfe;
+}
+
+/* Device Resizing Simulation */
+.workstation-viewport.device-tablet {
+  max-width: 680px;
+  margin: 0 auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.workstation-viewport.device-mobile {
+  max-width: 360px;
+  margin: 0 auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.viewport-inner {
+  padding: 1.5rem;
+  animation: fade-in 0.3s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Preview Mode */
+.mini-web-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.25rem;
+}
+
+body.light-theme .mini-web-header {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.mini-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mini-logo {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.15rem 0.4rem;
+  background: var(--primary, #ff4b26);
+  color: #ffffff;
+  border-radius: var(--radius-xs, 4px);
+}
+
+.mini-title {
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+body.light-theme .mini-title {
+  color: #0a0b10;
+}
+
+.mini-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mini-nav-item {
+  font-size: 0.72rem;
+  color: var(--text-dim, #616575);
+  font-weight: 500;
+}
+
+.mini-nav-item.active {
+  color: var(--primary, #ff4b26);
+  font-weight: 600;
+}
+
+.mini-badge-pill {
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted, #9da2b4);
+}
+
+.mini-web-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.mini-hero-tagline {
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.7rem;
+  color: var(--primary, #ff4b26);
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.mini-hero-heading {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0;
+}
+
+body.light-theme .mini-hero-heading {
+  color: #0a0b10;
+}
+
+.mini-hero-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted, #9da2b4);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Mini Cards Row */
+.mini-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.mini-stat-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm, 8px);
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+body.light-theme .mini-stat-card {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.mini-stat-card.highlight {
+  border-color: var(--primary, #ff4b26);
+  background: rgba(255, 75, 38, 0.08);
+}
+
+.stat-num {
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+body.light-theme .stat-num {
+  color: #0a0b10;
+}
+
+.stat-label {
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.6rem;
+  color: var(--text-dim, #616575);
+  letter-spacing: 0.05em;
+}
+
+.mini-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.mini-live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.75rem;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-xs, 4px);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mini-live-link:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.mini-compile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--primary, #ff4b26);
+  color: #ffffff;
+  border: none;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-xs, 4px);
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--primary-glow, rgba(255, 75, 38, 0.4));
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.mini-compile-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+/* Code Mode */
+.code-editor-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.7rem;
+  color: var(--text-dim, #616575);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 1rem;
+}
+
+.code-display {
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+/* Terminal Mode */
+.terminal-log-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.75rem;
+}
+
+.log-line {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.text-dim { color: #64748b; }
+.text-cyan { color: #00f0ff; }
+.text-white { color: #f8fafc; }
+.text-emerald { color: #10b981; }
+.text-amber { color: #f59e0b; }
+
+.terminal-cursor-line {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  color: #f8fafc;
+}
+
+.cursor-prompt {
+  color: var(--primary, #ff4b26);
+  font-weight: 700;
+}
+
+.cursor-blink {
+  animation: blink 1s infinite;
+  color: var(--primary, #ff4b26);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ==========================================================================
+   WORKSTATION FOOTER BAR
+   ========================================================================== */
+
+.workstation-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0 0 var(--radius-lg, 20px) var(--radius-lg, 20px);
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.7rem;
+}
+
+body.light-theme .workstation-footer-bar {
+  border-top-color: rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.footer-status-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-dim, #616575);
+}
+
+.cpu-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #10b981;
+}
+
+.divider {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.footer-shutter-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1px solid rgba(255, 75, 38, 0.4);
+  color: var(--primary, #ff4b26);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-xs, 4px);
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.footer-shutter-trigger:hover {
+  background: var(--primary, #ff4b26);
+  color: #ffffff;
+  box-shadow: 0 0 12px var(--primary-glow, rgba(255, 75, 38, 0.4));
+}
+
+.shutter-bolt {
+  font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE STYLES
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .tech-orbital {
+    display: none; /* Hide orbitals on mobile to avoid screen clutter */
+  }
+
+  .chrome-device-controls {
+    display: none;
+  }
+
+  .workstation-chrome {
+    flex-wrap: wrap;
+    padding: 0.6rem 0.85rem;
+  }
+
+  .chrome-mode-tabs {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mode-tab {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .workstation-url-bar {
+    padding: 0.4rem 0.85rem;
+  }
+
+  .url-telemetry {
+    display: none;
+  }
+
+  .mini-cards-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mini-hero-heading {
+    font-size: 1.15rem;
+  }
+}

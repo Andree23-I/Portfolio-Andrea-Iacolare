@@ -27,10 +27,20 @@ export const translations = {
     // Section Titles & Subtitles
     ExperienceTitle: "Experience & Education",
     SkillsTitle: "Technical Skills & Arsenal",
-    ProjectsTitle: "Featured Projects",
+    ProjectsTitle: "What I Build",
     ProjectsSubtitle: "A showcase of web applications and digital platforms crafted with modern technologies.",
-    ContactTitle: "Let's Build Something Great",
-    ContactSubtitle: "Feel free to reach out for collaborations, project inquiries, or just to say hi.",
+    ContactTitle: "Initialize Collaboration",
+    ContactSubtitle: "Feel free to reach out for collaborations, project inquiries, or architectural consultations.",
+    
+    // Emma Parker Cinematic Editorial Additions
+    JourneyTitle: "The Journey So Far",
+    JourneySubtitle: "Key milestones, full-stack evolution, and continuous production engineering.",
+    PhilosophyQuote: "Great websites are rarely just code. They are engineered at the exact intersection of cinematic design, instant performance, and resilient architecture.",
+    PhilosophyAuthor: "Andrea Iacolare • Creative Web Technologist",
+    AchievementsTitle: "Telemetry & Production Metrics",
+    AchievementsSubtitle: "Verified performance metrics across deployed applications and client systems.",
+    TestimonialsTitle: "In Their Words",
+    TestimonialsSubtitle: "What clients and collaborators say about technical execution and aesthetics.",
     
     // Project Card
     LiveDemo: "Live Demo",
@@ -192,10 +202,20 @@ export const translations = {
     // Section Titles & Subtitles
     ExperienceTitle: "Esperienza & Formazione",
     SkillsTitle: "Competenze Tecniche & Stack",
-    ProjectsTitle: "Progetti Selezionati",
+    ProjectsTitle: "Cosa Costruisco",
     ProjectsSubtitle: "Una selezione di applicazioni web e piattaforme realizzate con tecnologie all'avanguardia.",
-    ContactTitle: "Mettiamoci in Contatto",
+    ContactTitle: "Inizializza Collaborazione",
     ContactSubtitle: "Hai un'idea o vuoi collaborare? Scrivimi pure tramite email o attraverso i miei canali social.",
+    
+    // Emma Parker Cinematic Editorial Additions
+    JourneyTitle: "Il Percorso Fino ad Ora",
+    JourneySubtitle: "Tappe fondamentali, evoluzione full-stack ed ingegneria di produzione continua.",
+    PhilosophyQuote: "I grandi siti web non sono mai solo codice. Nascono nel punto esatto di incontro tra design cinematografico, prestazioni istantanee ed architetture resilienti.",
+    PhilosophyAuthor: "Andrea Iacolare • Creative Web Technologist",
+    AchievementsTitle: "Telemetria & Metriche di Produzione",
+    AchievementsSubtitle: "Parametri di performance certificati su applicazioni in produzione.",
+    TestimonialsTitle: "Dicono di Me",
+    TestimonialsSubtitle: "Cosa dicono clienti e collaboratori su esecuzione tecnica ed estetica.",
     
     // Project Card
     LiveDemo: "Visita Sito",

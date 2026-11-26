@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { SettingsContext } from '../contexts/SettingsContext';
 import { translations } from '../translations';
 import { 
@@ -14,10 +14,10 @@ import {
 import './Header.css';
 
 const navItems = [
-  { path: '/intro', labelKey: 'Intro', num: '01', icon: <FiUser /> },
-  { path: '/skills', labelKey: 'Skills', num: '02', icon: <FiCode /> },
-  { path: '/projects', labelKey: 'Projects', num: '03', icon: <FiLayers /> },
-  { path: '/contact', labelKey: 'Contact', num: '04', icon: <FiMail /> },
+  { path: '/intro', sectionId: 'hero', labelKey: 'Intro', num: '01', icon: <FiUser /> },
+  { path: '/skills', sectionId: 'craft', labelKey: 'Skills', num: '02', icon: <FiCode /> },
+  { path: '/projects', sectionId: 'work', labelKey: 'Projects', num: '03', icon: <FiLayers /> },
+  { path: '/contact', sectionId: 'contact', labelKey: 'Contact', num: '04', icon: <FiMail /> },
 ];
 
 function Header() {
@@ -28,13 +28,42 @@ function Header() {
     toggleLanguage
   } = useContext(SettingsContext);
 
+  const location = useLocation();
+  const navigate = useNavigate();
   const t = translations[language] || translations.it;
+
+  const handleLinkClick = (e, item) => {
+    // If on intro page and section element exists, smooth scroll to it
+    if (location.pathname === '/intro' || location.pathname === '/') {
+      const element = document.getElementById(item.sectionId);
+      if (element) {
+        e.preventDefault();
+        element.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+    // Otherwise standard navigation
+    navigate(item.path);
+  };
 
   return (
     <header className="command-bar-wrapper" role="banner">
       <nav className="command-bar" aria-label="Main Navigation">
         {/* Brand Monogram */}
-        <NavLink to="/intro" className="command-brand" title="Andrea Iacolare | Portfolio">
+        <NavLink 
+          to="/intro" 
+          className="command-brand" 
+          title="Andrea Iacolare | Portfolio"
+          onClick={(e) => {
+            if (location.pathname === '/intro' || location.pathname === '/') {
+              const el = document.getElementById('hero');
+              if (el) {
+                e.preventDefault();
+                el.scrollIntoView({ behavior: 'smooth' });
+              }
+            }
+          }}
+        >
           <span className="brand-bracket">[</span>
           <span className="brand-monogram">AI</span>
           <span className="brand-divider">{'//'}</span>
@@ -51,6 +80,7 @@ function Header() {
             <NavLink 
               key={item.path} 
               to={item.path} 
+              onClick={(e) => handleLinkClick(e, item)}
               className={({ isActive }) => isActive ? 'command-link active' : 'command-link'}
               title={t[item.labelKey] || item.labelKey}
             >
