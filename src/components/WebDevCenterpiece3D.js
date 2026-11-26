@@ -23,17 +23,31 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     scene: null,
     camera: null,
     sculptureGroup: null,
-    desktopMesh: null,
-    mobileMesh: null,
-    codeMesh: null,
+    
+    desktopGroup: null,
+    mobileGroup: null,
+    codeGroup: null,
+    halosGroup: null,
+    tokensGroup: null,
+
+    deskScreenMesh: null,
+    mobScreenMesh: null,
+    codeScreenMesh: null,
     interactiveMeshes: [],
+    
     raycaster: new THREE.Raycaster(),
     mouseVec: new THREE.Vector2(),
-    halo1: null,
-    halo2: null,
+
+    // Materials that animate opacity
+    deskScreenMat: null,
+    mobScreenMat: null,
+    codeScreenMat: null,
+    halo1Mat: null,
+    halo2Mat: null,
+
     orbitals: [],
-    
-    // Focus angles and camera targets
+
+    // Active mode & configuration
     activeMode: 'overview',
     baseRotX: 0.12,
     baseRotY: -0.22,
@@ -41,20 +55,45 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     targetRotY: -0.22,
     curRotX: 0.12,
     curRotY: -0.22,
-    
-    targetCamX: 0,
-    targetCamY: 0.1,
-    targetCamZ: 5.4,
-    
-    targetLookAt: new THREE.Vector3(0, 0, 0),
+
+    // Target transforms for smooth lerp transitions
+    targets: {
+      desktop: {
+        pos: new THREE.Vector3(0, 0, 0),
+        rotY: 0,
+        scale: new THREE.Vector3(1, 1, 1),
+        opacity: 1.0
+      },
+      mobile: {
+        pos: new THREE.Vector3(2.3, -0.15, 0.45),
+        rotY: -0.32,
+        scale: new THREE.Vector3(1, 1, 1),
+        opacity: 1.0
+      },
+      code: {
+        pos: new THREE.Vector3(-2.35, 0.2, -0.45),
+        rotY: 0.35,
+        scale: new THREE.Vector3(1, 1, 1),
+        opacity: 1.0
+      },
+      halos: {
+        scale: new THREE.Vector3(1, 1, 1),
+        opacity: 1.0
+      },
+      cam: {
+        pos: new THREE.Vector3(0, 0.1, 5.4),
+        lookAt: new THREE.Vector3(0, 0, 0)
+      }
+    },
+
     curLookAt: new THREE.Vector3(0, 0, 0),
-    
+
     userDragging: false,
     dragStartX: 0,
     dragStartY: 0,
     startRotX: 0,
     startRotY: 0,
-    
+
     desktopTexture: null,
     mobileTexture: null,
     codeTexture: null
@@ -85,7 +124,7 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     } catch {}
   }, []);
 
-  // Update focus perspective on one of the devices
+  // Update focus perspective: smoothly re-stages viewports so selected one is front-and-center
   const setFocus = useCallback((mode) => {
     setActiveFocus(mode);
     playSoftClick();
@@ -96,40 +135,114 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     const isMobileViewport = (containerRef.current?.clientWidth || window.innerWidth) < 768;
 
     if (mode === 'desktop') {
-      // Zoom right into the Desktop Viewport showing southdvstudio.eu front & center
+      // 1. DESKTOP VIEWPORT: Front & Center, fully framed, southdvstudio.eu crystal clear
       state.baseRotX = 0.0;
       state.baseRotY = 0.0;
-      state.targetCamX = 0;
-      state.targetCamY = 0.0;
-      state.targetCamZ = isMobileViewport ? 4.3 : 3.55;
-      state.targetLookAt.set(0, 0, 0);
+
+      state.targets.desktop.pos.set(0, 0, 0.35);
+      state.targets.desktop.rotY = 0;
+      state.targets.desktop.scale.set(1.08, 1.08, 1.08);
+      state.targets.desktop.opacity = 1.0;
+
+      // Mobile & Code step back into ambient depth
+      state.targets.mobile.pos.set(3.4, -0.3, -1.8);
+      state.targets.mobile.rotY = -0.45;
+      state.targets.mobile.scale.set(0.75, 0.75, 0.75);
+      state.targets.mobile.opacity = 0.3;
+
+      state.targets.code.pos.set(-3.4, 0.3, -1.8);
+      state.targets.code.rotY = 0.45;
+      state.targets.code.scale.set(0.75, 0.75, 0.75);
+      state.targets.code.opacity = 0.3;
+
+      // Rings scale down so they NEVER obstruct the desktop view
+      state.targets.halos.scale.set(0.2, 0.2, 0.2);
+      state.targets.halos.opacity = 0.05;
+
+      state.targets.cam.pos.set(0, 0, isMobileViewport ? 4.3 : 3.65);
+      state.targets.cam.lookAt.set(0, 0, 0.35);
+
     } else if (mode === 'mobile') {
-      // Rotate sculpture to bring the Mobile device front and center
-      state.baseRotX = 0.02;
-      state.baseRotY = -0.58;
-      state.targetCamX = 0.25;
-      state.targetCamY = -0.12;
-      state.targetCamZ = isMobileViewport ? 3.9 : 3.25;
-      state.targetLookAt.set(0.2, -0.1, 0);
+      // 2. MOBILE VIEWPORT: Glides right to FRONT AND CENTER, perfectly upright and enlarged
+      state.baseRotX = 0.0;
+      state.baseRotY = 0.0;
+
+      state.targets.mobile.pos.set(0, 0, 0.65);
+      state.targets.mobile.rotY = 0;
+      state.targets.mobile.scale.set(1.35, 1.35, 1.35);
+      state.targets.mobile.opacity = 1.0;
+
+      // Desktop steps back into depth at an ambient angle
+      state.targets.desktop.pos.set(-2.2, 0, -1.5);
+      state.targets.desktop.rotY = 0.35;
+      state.targets.desktop.scale.set(0.7, 0.7, 0.7);
+      state.targets.desktop.opacity = 0.25;
+
+      state.targets.code.pos.set(-3.8, 0, -2.4);
+      state.targets.code.rotY = 0.55;
+      state.targets.code.scale.set(0.5, 0.5, 0.5);
+      state.targets.code.opacity = 0.15;
+
+      state.targets.halos.scale.set(0.2, 0.2, 0.2);
+      state.targets.halos.opacity = 0.05;
+
+      state.targets.cam.pos.set(0, 0, isMobileViewport ? 3.9 : 3.3);
+      state.targets.cam.lookAt.set(0, 0, 0.65);
+
     } else if (mode === 'code') {
-      // Rotate sculpture to bring the React 18 / Next.js code panel front and center
-      state.baseRotX = 0.02;
-      state.baseRotY = 0.58;
-      state.targetCamX = -0.25;
-      state.targetCamY = 0.12;
-      state.targetCamZ = isMobileViewport ? 4.1 : 3.35;
-      state.targetLookAt.set(-0.2, 0.1, 0);
+      // 3. CODE VIEWPORT: Glides right to FRONT AND CENTER, perfectly upright and readable
+      state.baseRotX = 0.0;
+      state.baseRotY = 0.0;
+
+      state.targets.code.pos.set(0, 0, 0.65);
+      state.targets.code.rotY = 0;
+      state.targets.code.scale.set(1.28, 1.28, 1.28);
+      state.targets.code.opacity = 1.0;
+
+      // Desktop steps back to the right
+      state.targets.desktop.pos.set(2.2, 0, -1.5);
+      state.targets.desktop.rotY = -0.35;
+      state.targets.desktop.scale.set(0.7, 0.7, 0.7);
+      state.targets.desktop.opacity = 0.25;
+
+      state.targets.mobile.pos.set(3.8, 0, -2.4);
+      state.targets.mobile.rotY = -0.55;
+      state.targets.mobile.scale.set(0.5, 0.5, 0.5);
+      state.targets.mobile.opacity = 0.15;
+
+      state.targets.halos.scale.set(0.2, 0.2, 0.2);
+      state.targets.halos.opacity = 0.05;
+
+      state.targets.cam.pos.set(0, 0, isMobileViewport ? 4.0 : 3.4);
+      state.targets.cam.lookAt.set(0, 0, 0.65);
+
     } else {
-      // Overview mode: complete 3D spatial multi-viewport perspective
+      // 4. OVERVIEW MODE: Complete 3D spatial multi-viewport sculpture with orbital rings
       state.baseRotX = 0.12;
       state.baseRotY = -0.25;
-      state.targetCamX = 0;
-      state.targetCamY = 0.1;
-      state.targetCamZ = isMobileViewport ? 6.3 : 5.4;
-      state.targetLookAt.set(0, 0, 0);
+
+      state.targets.desktop.pos.set(0, 0, 0);
+      state.targets.desktop.rotY = 0;
+      state.targets.desktop.scale.set(1, 1, 1);
+      state.targets.desktop.opacity = 1.0;
+
+      state.targets.mobile.pos.set(2.3, -0.15, 0.45);
+      state.targets.mobile.rotY = -0.32;
+      state.targets.mobile.scale.set(1, 1, 1);
+      state.targets.mobile.opacity = 1.0;
+
+      state.targets.code.pos.set(-2.35, 0.2, -0.45);
+      state.targets.code.rotY = 0.35;
+      state.targets.code.scale.set(1, 1, 1);
+      state.targets.code.opacity = 1.0;
+
+      state.targets.halos.scale.set(1, 1, 1);
+      state.targets.halos.opacity = 1.0;
+
+      state.targets.cam.pos.set(0, 0.1, isMobileViewport ? 6.3 : 5.4);
+      state.targets.cam.lookAt.set(0, 0, 0);
     }
 
-    // Immediately aim target rotations to the new base
     state.targetRotX = state.baseRotX;
     state.targetRotY = state.baseRotY;
   }, [playSoftClick]);
@@ -348,17 +461,6 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     dTex.minFilter = THREE.LinearMipmapLinearFilter;
     dTex.generateMipmaps = true;
 
-    // Also attempt loading the high-res SVG image on top for maximum crispness
-    const svgImg = new Image();
-    svgImg.crossOrigin = 'anonymous';
-    svgImg.onload = () => {
-      if (dCtx) {
-        dCtx.drawImage(svgImg, 0, 88, 2048, 1280 - 88);
-        dTex.needsUpdate = true;
-      }
-    };
-    svgImg.src = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/southdvstudio.svg` : '/southdvstudio.svg';
-
     // -------------------------------------------------------------
     // 2. Mobile Screen Texture (southdvstudio.eu Responsive View)
     // -------------------------------------------------------------
@@ -439,7 +541,7 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
       mCtx.font = 'bold 22px "Fira Code", monospace';
       mCtx.fillText('Richiedi Bozza Gratuita →', 90, 600);
 
-      // 3 Mobile Metric Cards
+      // 4 Mobile Metric Cards
       const mCards = [
         { val: '0€', lbl: 'Anticipo Iniziale', y: 660 },
         { val: '7 Giorni', lbl: 'Consegna Rapida', y: 780 },
@@ -561,7 +663,7 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     const camera = new THREE.PerspectiveCamera(40, 16 / 9, 0.1, 100);
     camera.position.set(0, 0.1, isMobile ? 6.3 : 5.4);
     state.camera = camera;
-    state.targetCamZ = isMobile ? 6.3 : 5.4;
+    state.targets.cam.pos.set(0, 0.1, isMobile ? 6.3 : 5.4);
 
     // Studio Lighting
     scene.add(new THREE.AmbientLight(0xffffff, 1.4));
@@ -608,97 +710,137 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     // 1. Center Desktop Screen Viewport (16:10)
     const desktopGroup = new THREE.Group();
     desktopGroup.name = 'desktop';
+    state.desktopGroup = desktopGroup;
 
     const deskGeo = new THREE.BoxGeometry(3.6, 2.25, 0.07);
     const deskFrame = new THREE.Mesh(deskGeo, glassFrameMat);
     desktopGroup.add(deskFrame);
     desktopGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(deskGeo), edgeLineMat));
 
+    const deskScreenMat = new THREE.MeshBasicMaterial({ 
+      map: dTex, 
+      transparent: true, 
+      opacity: 1.0 
+    });
+    state.deskScreenMat = deskScreenMat;
+
     const deskScreenMesh = new THREE.Mesh(
       new THREE.PlaneGeometry(3.52, 2.18),
-      new THREE.MeshBasicMaterial({ map: dTex })
+      deskScreenMat
     );
     deskScreenMesh.position.z = 0.038;
     deskScreenMesh.name = 'desktop';
     desktopGroup.add(deskScreenMesh);
     sculptureGroup.add(desktopGroup);
-    state.desktopMesh = deskScreenMesh;
+    state.deskScreenMesh = deskScreenMesh;
 
     // 2. Mobile Viewport (Angled forward right)
     const mobileGroup = new THREE.Group();
     mobileGroup.name = 'mobile';
-    mobileGroup.position.set(2.2, -0.2, 0.45);
-    mobileGroup.rotation.y = THREE.MathUtils.degToRad(-18);
+    mobileGroup.position.set(2.3, -0.15, 0.45);
+    mobileGroup.rotation.y = -0.32;
+    state.mobileGroup = mobileGroup;
 
     const mobGeo = new THREE.BoxGeometry(1.15, 2.3, 0.06);
     const mobFrame = new THREE.Mesh(mobGeo, glassFrameMat);
     mobileGroup.add(mobFrame);
     mobileGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(mobGeo), edgeLineMat));
 
+    const mobScreenMat = new THREE.MeshBasicMaterial({ 
+      map: mTex, 
+      transparent: true, 
+      opacity: 1.0 
+    });
+    state.mobScreenMat = mobScreenMat;
+
     const mobScreenMesh = new THREE.Mesh(
       new THREE.PlaneGeometry(1.1, 2.24),
-      new THREE.MeshBasicMaterial({ map: mTex })
+      mobScreenMat
     );
     mobScreenMesh.position.z = 0.033;
     mobScreenMesh.name = 'mobile';
     mobileGroup.add(mobScreenMesh);
     sculptureGroup.add(mobileGroup);
-    state.mobileMesh = mobScreenMesh;
+    state.mobScreenMesh = mobScreenMesh;
 
     // 3. Code Viewport (Angled back left)
     const codeGroup = new THREE.Group();
     codeGroup.name = 'code';
-    codeGroup.position.set(-2.25, 0.25, -0.45);
-    codeGroup.rotation.y = THREE.MathUtils.degToRad(20);
+    codeGroup.position.set(-2.35, 0.2, -0.45);
+    codeGroup.rotation.y = 0.35;
+    state.codeGroup = codeGroup;
 
     const codeGeo = new THREE.BoxGeometry(1.8, 2.4, 0.06);
     const codeFrame = new THREE.Mesh(codeGeo, glassFrameMat);
     codeGroup.add(codeFrame);
     codeGroup.add(new THREE.LineSegments(new THREE.EdgesGeometry(codeGeo), edgeLineMat));
 
+    const codeScreenMat = new THREE.MeshBasicMaterial({ 
+      map: cTex, 
+      transparent: true, 
+      opacity: 1.0 
+    });
+    state.codeScreenMat = codeScreenMat;
+
     const codeScreenMesh = new THREE.Mesh(
       new THREE.PlaneGeometry(1.74, 2.34),
-      new THREE.MeshBasicMaterial({ map: cTex })
+      codeScreenMat
     );
     codeScreenMesh.position.z = 0.033;
     codeScreenMesh.name = 'code';
     codeGroup.add(codeScreenMesh);
     sculptureGroup.add(codeGroup);
-    state.codeMesh = codeScreenMesh;
+    state.codeScreenMesh = codeScreenMesh;
 
     state.interactiveMeshes = [deskScreenMesh, mobScreenMesh, codeScreenMesh];
 
-    // 4. Double Gyroscopic Orbital Rings
+    // 4. Double Gyroscopic Orbital Rings in a dedicated group
+    const halosGroup = new THREE.Group();
+    state.halosGroup = halosGroup;
+
+    const halo1Mat = new THREE.MeshStandardMaterial({
+      color: 0xff4b26,
+      metalness: 0.9,
+      roughness: 0.15,
+      emissive: 0xff4b26,
+      emissiveIntensity: 0.25,
+      transparent: true,
+      opacity: 1.0
+    });
+    state.halo1Mat = halo1Mat;
+
     const halo1 = new THREE.Mesh(
       new THREE.TorusGeometry(3.4, 0.018, 16, 120),
-      new THREE.MeshStandardMaterial({
-        color: 0xff4b26,
-        metalness: 0.9,
-        roughness: 0.15,
-        emissive: 0xff4b26,
-        emissiveIntensity: 0.25
-      })
+      halo1Mat
     );
     halo1.rotation.x = Math.PI / 2.3;
-    sculptureGroup.add(halo1);
-    state.halo1 = halo1;
+    halosGroup.add(halo1);
+
+    const halo2Mat = new THREE.MeshStandardMaterial({
+      color: 0x00f0ff,
+      metalness: 0.9,
+      roughness: 0.15,
+      emissive: 0x00f0ff,
+      emissiveIntensity: 0.25,
+      transparent: true,
+      opacity: 1.0
+    });
+    state.halo2Mat = halo2Mat;
 
     const halo2 = new THREE.Mesh(
       new THREE.TorusGeometry(3.6, 0.014, 16, 120),
-      new THREE.MeshStandardMaterial({
-        color: 0x00f0ff,
-        metalness: 0.9,
-        roughness: 0.15,
-        emissive: 0x00f0ff,
-        emissiveIntensity: 0.25
-      })
+      halo2Mat
     );
     halo2.rotation.x = -Math.PI / 2.6;
     halo2.rotation.y = Math.PI / 8;
-    sculptureGroup.add(halo2);
-    state.halo2 = halo2;
+    halosGroup.add(halo2);
 
-    // 5. Floating 3D Tech Tokens
+    sculptureGroup.add(halosGroup);
+
+    // 5. Floating 3D Tech Tokens in a dedicated group
+    const tokensGroup = new THREE.Group();
+    state.tokensGroup = tokensGroup;
+
     const techTokens = [
       { text: 'NEXT.JS 15', color: 0xffffff, pos: [-2.6, 1.6, 0.3] },
       { text: 'REACT 18', color: 0x00f0ff, pos: [2.5, 1.6, 0.2] },
@@ -731,11 +873,12 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
       );
       g.add(wire);
 
-      sculptureGroup.add(g);
+      tokensGroup.add(g);
       return { group: g, origPos: tok.pos, speed: Math.random() * 0.4 + 0.8 };
     });
     state.orbitals = tokenMeshes;
 
+    sculptureGroup.add(tokensGroup);
     scene.add(sculptureGroup);
 
     // Mouse & Touch Drag Handlers (Smooth Orbit & Additive Parallax)
@@ -760,15 +903,14 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
         }
         state.targetRotY = state.startRotY + deltaX * 0.007;
         state.targetRotX = Math.max(-0.4, Math.min(0.5, state.startRotX + deltaY * 0.007));
-        // Update base rotations so drag doesn't snap back
         state.baseRotX = state.targetRotX;
         state.baseRotY = state.targetRotY;
       } else {
-        // Subtle additive parallax around the current baseRot!
+        // Subtle additive parallax around baseRot
         const rect = container.getBoundingClientRect();
         const normX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
         const normY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-        state.targetRotY = state.baseRotY + normX * 0.07;
+        state.targetRotY = state.baseRotY + normX * 0.06;
         state.targetRotX = state.baseRotX - normY * 0.04;
       }
     };
@@ -850,20 +992,59 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
     const animate = () => {
       const time = clock.getElapsedTime();
 
-      // Smooth interpolation of sculpture rotation
-      state.curRotX += (state.targetRotX - state.curRotX) * 0.09;
-      state.curRotY += (state.targetRotY - state.curRotY) * 0.09;
+      // Smooth interpolation of sculpture overall rotation
+      state.curRotX += (state.targetRotX - state.curRotX) * 0.08;
+      state.curRotY += (state.targetRotY - state.curRotY) * 0.08;
 
-      // Gentle continuous organic breathing sway only in overview mode
       const isOverview = state.activeMode === 'overview';
       const idleSway = isOverview ? Math.sin(time * 0.7) * 0.012 : 0;
       sculptureGroup.rotation.x = state.curRotX + idleSway;
       sculptureGroup.rotation.y = state.curRotY;
       sculptureGroup.position.y = isOverview ? Math.sin(time * 1.1) * 0.04 : 0;
 
-      // Rotate gyroscopic rings
-      if (state.halo1) state.halo1.rotation.z += 0.003;
-      if (state.halo2) state.halo2.rotation.z -= 0.002;
+      // Smooth stage-actor transitions for each viewport!
+      if (state.desktopGroup) {
+        state.desktopGroup.position.lerp(state.targets.desktop.pos, 0.08);
+        state.desktopGroup.rotation.y += (state.targets.desktop.rotY - state.desktopGroup.rotation.y) * 0.08;
+        state.desktopGroup.scale.lerp(state.targets.desktop.scale, 0.08);
+      }
+
+      if (state.mobileGroup) {
+        state.mobileGroup.position.lerp(state.targets.mobile.pos, 0.08);
+        state.mobileGroup.rotation.y += (state.targets.mobile.rotY - state.mobileGroup.rotation.y) * 0.08;
+        state.mobileGroup.scale.lerp(state.targets.mobile.scale, 0.08);
+      }
+
+      if (state.codeGroup) {
+        state.codeGroup.position.lerp(state.targets.code.pos, 0.08);
+        state.codeGroup.rotation.y += (state.targets.code.rotY - state.codeGroup.rotation.y) * 0.08;
+        state.codeGroup.scale.lerp(state.targets.code.scale, 0.08);
+      }
+
+      // Smooth scaling and fading of orbital halos and tokens
+      if (state.halosGroup) {
+        state.halosGroup.scale.lerp(state.targets.halos.scale, 0.08);
+      }
+      if (state.tokensGroup) {
+        state.tokensGroup.scale.lerp(state.targets.halos.scale, 0.08);
+      }
+
+      // Smooth opacity fading
+      if (state.deskScreenMat) {
+        state.deskScreenMat.opacity += (state.targets.desktop.opacity - state.deskScreenMat.opacity) * 0.08;
+      }
+      if (state.mobScreenMat) {
+        state.mobScreenMat.opacity += (state.targets.mobile.opacity - state.mobScreenMat.opacity) * 0.08;
+      }
+      if (state.codeScreenMat) {
+        state.codeScreenMat.opacity += (state.targets.code.opacity - state.codeScreenMat.opacity) * 0.08;
+      }
+
+      // Rotate gyroscopic rings in overview
+      if (isOverview) {
+        halo1.rotation.z += 0.003;
+        halo2.rotation.z -= 0.002;
+      }
 
       // Floating tech tokens
       state.orbitals.forEach((tok, i) => {
@@ -871,13 +1052,9 @@ export default function WebDevCenterpiece3D({ language = 'it' }) {
         tok.group.rotation.y += 0.015;
       });
 
-      // Smooth camera position interpolation
-      camera.position.x += (state.targetCamX - camera.position.x) * 0.08;
-      camera.position.y += (state.targetCamY - camera.position.y) * 0.08;
-      camera.position.z += (state.targetCamZ - camera.position.z) * 0.08;
-
-      // Smooth lookAt interpolation
-      state.curLookAt.lerp(state.targetLookAt, 0.08);
+      // Smooth camera position and lookAt interpolation
+      camera.position.lerp(state.targets.cam.pos, 0.08);
+      state.curLookAt.lerp(state.targets.cam.lookAt, 0.08);
       camera.lookAt(state.curLookAt);
 
       renderer.render(scene, camera);
